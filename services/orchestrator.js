@@ -26,6 +26,14 @@ function processReading(reading, context) {
   if (prevState === undefined) {
     machine.lastOperatingState = reading.operating_state;
     machine.pendingStateChangeEvents = [];
+    if (context.persistence) {
+      context.persistence.upsertMachine({
+        id: reading.machine_id,
+        type: machine.type,
+        energy_source: machine.energy,
+        last_operating_state: reading.operating_state
+      });
+    }
   } else if (prevState !== reading.operating_state) {
     const stateChangeEvents = incidentEngine.onStateChange(
       reading.machine_id, prevState, reading.operating_state
@@ -33,6 +41,14 @@ function processReading(reading, context) {
     machine.lastOperatingState = reading.operating_state;
     settling.start(reading.machine_id, config.settlingMs);
     machine.pendingStateChangeEvents = stateChangeEvents;
+    if (context.persistence) {
+      context.persistence.upsertMachine({
+        id: reading.machine_id,
+        type: machine.type,
+        energy_source: machine.energy,
+        last_operating_state: reading.operating_state
+      });
+    }
   }
 
   // STEP 2 — settling check
@@ -55,6 +71,12 @@ function processReading(reading, context) {
     drift = baselineStore.getDrift(reading.machine_id, reading.operating_state);
   }
   const { incident, lifecycleEvents } = incidentEngine.apply(reading, anomaly, drift);
+
+  // Persist incident state (incident is null when closed; activeIncident is same object with CLOSED status)
+  if (context.persistence) {
+    const toSave = incident ?? activeIncident;
+    if (toSave) context.persistence.upsertIncident(toSave);
+  }
 
   // STEP 6 — metrics
   const loss = metricsEngine.computeLoss(reading, baseline, config.current_tariff);

@@ -180,6 +180,13 @@ class IncidentEngine {
     incident.verificationStartedAt = Date.now();
     return incident;
   }
+  restoreActive(incident) {
+    this.active.set(incident.machine_id, incident);
+  }
+
+  restoreHistory(machineId, incidents) {
+    this.history.set(machineId, incidents);
+  }
 }
 
 module.exports = { IncidentEngine };

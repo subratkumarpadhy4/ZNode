@@ -8,6 +8,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "better-sqlite3": "^13.0.3",
     "dotenv": "^16.6.1",
     "express": "^4.22.2",
     "joi": "^17.13.8"

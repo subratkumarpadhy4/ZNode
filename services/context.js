@@ -4,6 +4,7 @@ const { BaselineStore } = require('../engine/baselineStore');
 const { IncidentEngine } = require('../engine/incidentEngine');
 const { SettlingTracker } = require('./orchestrator');
 const { MACHINE_REGISTRY } = require('../config/machines');
+const { Persistence } = require('../db/persistence');
 
 const baselineStore = new BaselineStore();
 const incidentEngine = new IncidentEngine();
@@ -44,4 +45,6 @@ function resetContext() {
   }
 }
 
-module.exports = { baselineStore, incidentEngine, settling, machineRegistry, config, resetContext };
+const persistence = new Persistence(process.env.DB_PATH || 'znode.db');
+
+module.exports = { baselineStore, incidentEngine, settling, machineRegistry, config, persistence, resetContext };
