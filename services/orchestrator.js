@@ -99,6 +99,7 @@ function processReading(reading, context) {
     machine: reading.machine_id,
     anomaly,
     incident,
+    baseline_mean: baseline.mean,
     metrics: { loss, confidence },
     carbon,
     lifecycleEvents

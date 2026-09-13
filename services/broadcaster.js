@@ -17,6 +17,7 @@ class Broadcaster {
       if (this.pending.size === 0) return;
       const batch = [...this.pending.values()].map(result => ({
         machine_id: result.machine,
+        baseline_mean: result.baseline_mean ?? 0,
         anomaly: {
           is_anomaly: result.anomaly.isAnomaly,
           flags: result.anomaly.flags,

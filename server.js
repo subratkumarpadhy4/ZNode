@@ -1,6 +1,7 @@
 require('dotenv').config();
 const http = require('http');
 const express = require('express');
+const cors = require('cors');
 const { Server } = require('socket.io');
 const validationMiddleware = require('./middleware/validation');
 const telemetryController = require('./controllers/telemetryController');
@@ -12,6 +13,7 @@ const context = require('./services/context');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json({ limit: '10kb' }));
 
 app.get('/health', (req, res) => {
@@ -30,9 +32,13 @@ context.broadcaster = broadcaster;
 
 function buildSnapshot(ctx) {
   return Object.keys(ctx.machineRegistry).map(machineId => {
+    const machine = ctx.machineRegistry[machineId];
+    const lastState = machine.lastOperatingState;
+    const baseline = lastState ? ctx.baselineStore.get(machineId, lastState) : { mean: 0 };
     const incident = ctx.incidentEngine.getActive(machineId);
     return {
       machine_id: machineId,
+      baseline_mean: baseline.mean,
       anomaly: { is_anomaly: false, flags: [], reason: null, z_kw: 0, z_temp: 0 },
       incident: incident ? {
         id: incident.id,
@@ -49,6 +55,10 @@ function buildSnapshot(ctx) {
 
 io.on('connection', (socket) => {
   socket.emit('snapshot', buildSnapshot(context));
+});
+
+app.get('/api/machines/snapshot', (req, res) => {
+  res.json({ ok: true, machines: buildSnapshot(context) });
 });
 
 // ── Expose for tests ──────────────────────────────────────────────────────────
