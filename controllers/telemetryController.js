@@ -14,7 +14,11 @@ function handleTelemetry(req, res) {
     });
   }
 
-  // status === 'OK'
+  // status === 'OK' — enqueue for broadcast and respond
+  if (context.broadcaster) {
+    context.broadcaster.enqueue(result);
+  }
+
   return res.status(200).json({
     ok: true,
     status: 'OK',

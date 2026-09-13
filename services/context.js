@@ -47,4 +47,4 @@ function resetContext() {
 
 const persistence = new Persistence(process.env.DB_PATH || 'znode.db');
 
-module.exports = { baselineStore, incidentEngine, settling, machineRegistry, config, persistence, resetContext };
+module.exports = { baselineStore, incidentEngine, settling, machineRegistry, config, persistence, broadcaster: null, resetContext };

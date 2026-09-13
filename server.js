@@ -1,9 +1,12 @@
 require('dotenv').config();
+const http = require('http');
 const express = require('express');
+const { Server } = require('socket.io');
 const validationMiddleware = require('./middleware/validation');
 const telemetryController = require('./controllers/telemetryController');
 const incidentController = require('./controllers/incidentController');
 const { bootstrap } = require('./db/bootstrap');
+const { Broadcaster } = require('./services/broadcaster');
 const context = require('./services/context');
 
 const app = express();
@@ -16,19 +19,54 @@ app.get('/health', (req, res) => {
 });
 
 app.post('/api/telemetry', validationMiddleware.validateTelemetry, telemetryController.handleTelemetry);
-
 app.post('/api/incidents/:machine_id/acknowledge', incidentController.acknowledge);
 app.post('/api/incidents/:machine_id/claim-fixed', incidentController.claimFixed);
 
+// ── Socket.io setup (always created so tests can use it) ─────────────────────
+const httpServer = http.createServer(app);
+const io = new Server(httpServer, { cors: { origin: '*' } });
+const broadcaster = new Broadcaster(io, 500);
+context.broadcaster = broadcaster;
+
+function buildSnapshot(ctx) {
+  return Object.keys(ctx.machineRegistry).map(machineId => {
+    const incident = ctx.incidentEngine.getActive(machineId);
+    return {
+      machine_id: machineId,
+      anomaly: { is_anomaly: false, flags: [], reason: null, z_kw: 0, z_temp: 0 },
+      incident: incident ? {
+        id: incident.id,
+        status: incident.status,
+        flags: [...incident.flags],
+        max_anomaly_streak: incident.maxAnomalyStreak
+      } : null,
+      metrics: { loss_rupees_per_hour: 0, excess_kw: 0, confidence: null, signatures_matched: 0 },
+      carbon: { co2_rate_kg_hr: 0 },
+      lifecycleEvents: []
+    };
+  });
+}
+
+io.on('connection', (socket) => {
+  socket.emit('snapshot', buildSnapshot(context));
+});
+
+// ── Expose for tests ──────────────────────────────────────────────────────────
+app.httpServer = httpServer;
+app.broadcaster = broadcaster;
+app.io = io;
+
 if (require.main === module) {
   bootstrap(context.persistence, context);
+  broadcaster.start();
 
   process.on('SIGINT', () => {
+    broadcaster.stop();
     context.persistence.close();
     process.exit(0);
   });
 
-  app.listen(PORT, () => {
+  httpServer.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
   });
 }
