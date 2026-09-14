@@ -4,107 +4,105 @@ const ROOM_WIDTH  = 50;
 const ROOM_DEPTH  = 70;
 const ROOM_HEIGHT = 20;
 
-// Overhead fluorescent tube — emissive strip + point light pool
-function TubeLight({ position }) {
-  return (
-    <group position={position}>
-      {/* Glowing tube */}
-      <mesh>
-        <boxGeometry args={[6, 0.08, 0.18]} />
-        <meshStandardMaterial
-          color="#f0ecd8"
-          emissive="#f0ecd8"
-          emissiveIntensity={4}
-          roughness={1}
-          metalness={0}
-        />
-      </mesh>
-      {/* Metal housing */}
-      <mesh position={[0, 0.07, 0]}>
-        <boxGeometry args={[6.3, 0.1, 0.26]} />
-        <meshStandardMaterial color="#1e293b" roughness={0.9} metalness={0.5} />
-      </mesh>
-      {/* Light pool downward */}
-      <pointLight
-        color="#fffaf0"
-        intensity={6}
-        distance={16}
-        decay={2}
-      />
-    </group>
-  );
-}
-
 export default function FactoryRoom() {
   return (
     <group>
-      {/* ─── FLOOR ─────────────────────────────────────────────── */}
+      {/* ─── FLOOR ─────────────────────────────────────── */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
         <planeGeometry args={[ROOM_WIDTH, ROOM_DEPTH]} />
-        <meshStandardMaterial color="#3a3d42" roughness={0.88} metalness={0.06} />
+        <meshStandardMaterial color="#4a4d52" roughness={0.82} metalness={0.08} />
       </mesh>
 
-      {/* ─── FLOOR EXPANSION JOINTS ────────────────────────────── */}
+      {/* ─── FLOOR JOINT LINES ─────────────────────────── */}
       {[-20, -10, 0, 10, 20].map((x) => (
-        <mesh key={`jx-${x}`} position={[x, 0.012, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[0.06, ROOM_DEPTH]} />
-          <meshBasicMaterial color="#1a1d22" />
+        <mesh key={`jx-${x}`} position={[x, 0.01, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[0.1, ROOM_DEPTH]} />
+          <meshBasicMaterial color="#1e2126" />
         </mesh>
       ))}
       {[-28, -14, 0, 14, 28].map((z) => (
-        <mesh key={`jz-${z}`} position={[0, 0.012, z]} rotation={[-Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[ROOM_WIDTH, 0.06]} />
-          <meshBasicMaterial color="#1a1d22" />
+        <mesh key={`jz-${z}`} position={[0, 0.01, z]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[ROOM_WIDTH, 0.1]} />
+          <meshBasicMaterial color="#1e2126" />
         </mesh>
       ))}
 
-      {/* ─── CEILING ───────────────────────────────────────────── */}
+      {/* ─── CEILING ───────────────────────────────────── */}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, ROOM_HEIGHT, 0]}>
         <planeGeometry args={[ROOM_WIDTH, ROOM_DEPTH]} />
-        <meshStandardMaterial color="#0e1116" roughness={1} side={THREE.DoubleSide} />
+        <meshStandardMaterial color="#2a2e35" roughness={0.95} side={THREE.DoubleSide} />
       </mesh>
 
-      {/* ─── BACK WALL ─────────────────────────────────────────── */}
+      {/* ─── WALLS (lighter than before, catch light) ───── */}
       <mesh receiveShadow position={[0, ROOM_HEIGHT / 2, -ROOM_DEPTH / 2]}>
         <boxGeometry args={[ROOM_WIDTH, ROOM_HEIGHT, 0.4]} />
-        <meshStandardMaterial color="#1a1d22" roughness={0.95} />
+        <meshStandardMaterial color="#3a3f47" roughness={0.9} metalness={0.05} />
       </mesh>
-
-      {/* ─── LEFT WALL ─────────────────────────────────────────── */}
       <mesh receiveShadow position={[-ROOM_WIDTH / 2, ROOM_HEIGHT / 2, 0]}>
         <boxGeometry args={[0.4, ROOM_HEIGHT, ROOM_DEPTH]} />
-        <meshStandardMaterial color="#1a1d22" roughness={0.95} />
+        <meshStandardMaterial color="#3a3f47" roughness={0.9} metalness={0.05} />
       </mesh>
-
-      {/* ─── RIGHT WALL ────────────────────────────────────────── */}
       <mesh receiveShadow position={[ROOM_WIDTH / 2, ROOM_HEIGHT / 2, 0]}>
         <boxGeometry args={[0.4, ROOM_HEIGHT, ROOM_DEPTH]} />
-        <meshStandardMaterial color="#1a1d22" roughness={0.95} />
+        <meshStandardMaterial color="#3a3f47" roughness={0.9} metalness={0.05} />
       </mesh>
 
-      {/* ─── CEILING GIRDERS ───────────────────────────────────── */}
+      {/* ─── MAIN GIRDERS ─────────────────────────────── */}
       {[-28, -14, 0, 14, 28].map((z) => (
-        <mesh key={`girder-${z}`} position={[0, ROOM_HEIGHT - 1, z]}>
-          <boxGeometry args={[ROOM_WIDTH, 0.6, 0.8]} />
-          <meshStandardMaterial color="#0a0d12" roughness={0.85} metalness={0.2} />
+        <mesh key={`girder-${z}`} position={[0, ROOM_HEIGHT - 1, z]} castShadow>
+          <boxGeometry args={[ROOM_WIDTH, 0.7, 1.0]} />
+          <meshStandardMaterial color="#232730" roughness={0.82} metalness={0.25} />
         </mesh>
       ))}
 
-      {/* ─── TUBE LIGHTS — between girders ─────────────────────── */}
-      {[-21, -7, 7, 21].map((z) => (
-        <TubeLight key={`tube-${z}`} position={[0, ROOM_HEIGHT - 1.1, z]} />
+      {/* ─── CROSS BEAMS ──────────────────────────────── */}
+      {[-20, -10, 10, 20].map((x) => (
+        <mesh key={`cross-${x}`} position={[x, ROOM_HEIGHT - 0.7, 0]} castShadow>
+          <boxGeometry args={[0.6, 0.5, ROOM_DEPTH]} />
+          <meshStandardMaterial color="#232730" roughness={0.82} metalness={0.25} />
+        </mesh>
       ))}
 
-      {/* ─── CHANGE 3 — ceiling fixture discs above each point light ── */}
-      {[0, -15, 15].map((x, i) => (
-        <mesh
-          key={`fixture-${i}`}
-          position={[x, 19.7, i === 0 ? 0 : i === 1 ? -15 : 15]}
-          rotation={[Math.PI / 2, 0, 0]}
-        >
-          <circleGeometry args={[0.6, 24]} />
-          <meshBasicMaterial color="#fff8e0" />
+      {/* ─── WALL CONDUITS ────────────────────────────── */}
+      {[-22, -8, 8, 22].map((x) => (
+        <mesh key={`cond-b-${x}`} position={[x, 8, -ROOM_DEPTH / 2 + 0.5]}>
+          <cylinderGeometry args={[0.1, 0.1, 16, 12]} />
+          <meshStandardMaterial color="#4a5058" roughness={0.5} metalness={0.6} />
         </mesh>
+      ))}
+      {[-22, -8, 8, 22].map((z) => (
+        <mesh key={`cond-l-${z}`} position={[-ROOM_WIDTH / 2 + 0.5, 8, z]}>
+          <cylinderGeometry args={[0.1, 0.1, 16, 12]} />
+          <meshStandardMaterial color="#4a5058" roughness={0.5} metalness={0.6} />
+        </mesh>
+      ))}
+      {[-22, -8, 8, 22].map((z) => (
+        <mesh key={`cond-r-${z}`} position={[ROOM_WIDTH / 2 - 0.5, 8, z]}>
+          <cylinderGeometry args={[0.1, 0.1, 16, 12]} />
+          <meshStandardMaterial color="#4a5058" roughness={0.5} metalness={0.6} />
+        </mesh>
+      ))}
+
+      {/* ─── CEILING FIXTURES (5 total) ────────────────── */}
+      {[
+        [  0,   0],
+        [-15, -15],
+        [ 15,  15],
+        [-15,  15],
+        [ 15, -15],
+      ].map(([x, z], i) => (
+        <group key={`fixture-${i}`}>
+          {/* Housing */}
+          <mesh position={[x, ROOM_HEIGHT - 1.8, z]}>
+            <boxGeometry args={[3.0, 0.5, 0.8]} />
+            <meshStandardMaterial color="#1a1d24" roughness={0.6} metalness={0.4} />
+          </mesh>
+          {/* Emissive strip */}
+          <mesh position={[x, ROOM_HEIGHT - 2.1, z]}>
+            <boxGeometry args={[2.8, 0.1, 0.4]} />
+            <meshBasicMaterial color="#fff8e0" />
+          </mesh>
+        </group>
       ))}
     </group>
   );
