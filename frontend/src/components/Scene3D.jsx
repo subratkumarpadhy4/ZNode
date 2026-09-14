@@ -5,15 +5,18 @@ import FactoryRoom from './FactoryRoom';
 export default function Scene3D() {
   return (
     <Canvas
-      camera={{ position: [12, 10, 18], fov: 50 }}
+      camera={{ position: [8, 8, 12], fov: 50 }}
       shadows
       gl={{ antialias: true }}
       style={{ background: '#0a0e1a', width: '100%', height: '100%' }}
     >
-      <ambientLight intensity={0.15} />
+      {/* Main ambient fill */}
+      <ambientLight intensity={0.45} />
+
+      {/* Key light — upper right front */}
       <directionalLight
         position={[15, 25, 10]}
-        intensity={1.0}
+        intensity={1.6}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -24,6 +27,9 @@ export default function Scene3D() {
         shadow-camera-bottom={-40}
       />
 
+      {/* Fill light — opposite side to reduce harsh shadows */}
+      <directionalLight position={[-15, 15, -10]} intensity={0.4} />
+
       <FactoryRoom />
 
       <OrbitControls
@@ -33,7 +39,7 @@ export default function Scene3D() {
         maxPolarAngle={Math.PI / 2.1}
         minDistance={5}
         maxDistance={60}
-        target={[0, 1.5, 0]}
+        target={[0, 1, 0]}
       />
     </Canvas>
   );
