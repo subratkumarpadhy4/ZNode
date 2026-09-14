@@ -7,6 +7,6 @@ export default defineConfig({
     port: 5173
   },
   optimizeDeps: {
-    include: ['three']
+    include: ['three', 'socket.io-client']
   }
 });
