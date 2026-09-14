@@ -36,11 +36,16 @@ export default function Scene3D() {
       <FactoryRoom />
 
       <OrbitControls
-        target={[0, 1.5, 0]}
-        minDistance={6}
-        maxDistance={25}
-        minPolarAngle={Math.PI / 8}
-        maxPolarAngle={Math.PI / 2.3}
+        target={[0, 2, 0]}
+        minDistance={3}
+        maxDistance={14}
+        minPolarAngle={Math.PI / 3.2}
+        maxPolarAngle={Math.PI / 2.1}
+        minAzimuthAngle={-Math.PI / 2.5}
+        maxAzimuthAngle={Math.PI / 2.5}
+        enablePan={false}
+        enableZoom={true}
+        enableRotate={true}
       />
     </Canvas>
   );
