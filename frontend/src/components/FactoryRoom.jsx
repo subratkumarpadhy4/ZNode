@@ -321,7 +321,7 @@ function IColumn({ position }) {
   );
 }
 
-export default function FactoryRoom() {
+export default function FactoryRoom({ floorBright = false }) {
   const machines = useStore((s) => s.machines);
   const incidents = useStore((s) => s.incidents);
   const selectMachine = useStore((s) => s.selectMachine);
@@ -343,7 +343,7 @@ export default function FactoryRoom() {
 
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[ROOM_WIDTH, ROOM_DEPTH]} />
-        <meshStandardMaterial color={CONCRETE} roughness={0.92} metalness={0.02} />
+        <meshStandardMaterial color={floorBright ? '#84888e' : '#22252a'} roughness={0.95} metalness={0.05} />
       </mesh>
 
       {[-150, -75, 0, 75, 150].map((x) => (
