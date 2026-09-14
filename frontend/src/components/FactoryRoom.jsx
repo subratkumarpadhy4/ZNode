@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 
 const ROOM_WIDTH  = 80;   // unchanged
-const ROOM_DEPTH  = 200;  // was 140
-const ROOM_HEIGHT = 45;   // was 32
+const ROOM_DEPTH  = 300;  // was 200 → 1.5×
+const ROOM_HEIGHT = 45;   // unchanged
 
 export default function FactoryRoom() {
   return (
@@ -20,7 +20,7 @@ export default function FactoryRoom() {
           <meshBasicMaterial color="#1e2126" />
         </mesh>
       ))}
-      {[-90, -45, 0, 45, 90].map((z) => (
+      {[-135, -67, 0, 67, 135].map((z) => (
         <mesh key={`jz-${z}`} position={[0, 0.01, z]} rotation={[-Math.PI / 2, 0, 0]}>
           <planeGeometry args={[ROOM_WIDTH, 0.1]} />
           <meshBasicMaterial color="#1e2126" />
@@ -55,7 +55,7 @@ export default function FactoryRoom() {
       </mesh>
 
       {/* ─── MAIN GIRDERS — no castShadow ─────────────── */}
-      {[-80, -40, 0, 40, 80].map((z) => (
+      {[-120, -60, 0, 60, 120].map((z) => (
         <mesh key={`girder-${z}`} position={[0, ROOM_HEIGHT - 1, z]}>
           <boxGeometry args={[ROOM_WIDTH, 0.7, 1.2]} />
           <meshStandardMaterial color="#4a5260" roughness={0.7} metalness={0.35} />
@@ -77,13 +77,13 @@ export default function FactoryRoom() {
           <meshStandardMaterial color="#4a5058" roughness={0.5} metalness={0.6} />
         </mesh>
       ))}
-      {[-70, -35, 0, 35, 70].map((z) => (
+      {[-105, -52, 0, 52, 105].map((z) => (
         <mesh key={`cond-l-${z}`} position={[-ROOM_WIDTH / 2 + 0.5, 10, z]}>
           <cylinderGeometry args={[0.12, 0.12, 20, 12]} />
           <meshStandardMaterial color="#4a5058" roughness={0.5} metalness={0.6} />
         </mesh>
       ))}
-      {[-70, -35, 0, 35, 70].map((z) => (
+      {[-105, -52, 0, 52, 105].map((z) => (
         <mesh key={`cond-r-${z}`} position={[ROOM_WIDTH / 2 - 0.5, 10, z]}>
           <cylinderGeometry args={[0.12, 0.12, 20, 12]} />
           <meshStandardMaterial color="#4a5058" roughness={0.5} metalness={0.6} />
@@ -93,10 +93,10 @@ export default function FactoryRoom() {
       {/* ─── CEILING FIXTURES (5) ──────────────────────── */}
       {[
         [  0,   0],
-        [-24, -50],
-        [ 24,  50],
-        [-24,  50],
-        [ 24, -50],
+        [-24, -75],
+        [ 24,  75],
+        [-24,  75],
+        [ 24, -75],
       ].map(([x, z], i) => (
         <group key={`fixture-${i}`}>
           <mesh position={[x, ROOM_HEIGHT - 1.8, z]}>

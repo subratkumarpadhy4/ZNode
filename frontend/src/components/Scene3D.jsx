@@ -22,11 +22,11 @@ export default function Scene3D() {
       <directionalLight position={[-18, 18, -15]} intensity={0.22} color="#8b95a8" />
 
       {/* Five point lights at y = ROOM_HEIGHT - 6, matching fixture positions */}
-      <pointLight position={[  0, 39,   0]} intensity={200} distance={80} decay={1.4} color="#fff3dd" />
-      <pointLight position={[-24, 39, -50]} intensity={120} distance={80} decay={1.4} color="#fff3dd" />
-      <pointLight position={[ 24, 39,  50]} intensity={120} distance={80} decay={1.4} color="#fff3dd" />
-      <pointLight position={[-24, 39,  50]} intensity={100} distance={80} decay={1.4} color="#fff3dd" />
-      <pointLight position={[ 24, 39, -50]} intensity={100} distance={80} decay={1.4} color="#fff3dd" />
+      <pointLight position={[  0, 39,   0]} intensity={200} distance={100} decay={1.4} color="#fff3dd" />
+      <pointLight position={[-24, 39, -75]} intensity={120} distance={100} decay={1.4} color="#fff3dd" />
+      <pointLight position={[ 24, 39,  75]} intensity={120} distance={100} decay={1.4} color="#fff3dd" />
+      <pointLight position={[-24, 39,  75]} intensity={100} distance={100} decay={1.4} color="#fff3dd" />
+      <pointLight position={[ 24, 39, -75]} intensity={100} distance={100} decay={1.4} color="#fff3dd" />
 
       <FactoryRoom />
 
