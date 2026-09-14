@@ -7,9 +7,9 @@ export const ROOM_DEPTH = 640;
 export const ROOM_HEIGHT = 124;
 
 const MACHINE_LAYOUT = [
-  { id: 'M1', type: 'CNC',     pos: [-118, 0,  88], scale: 1.85 },
-  { id: 'M2', type: 'FURNACE', pos: [   0, 0, -168], scale: 2.05 },
-  { id: 'M3', type: 'KILN',    pos: [ 132, 0,  96], scale: 1.9 },
+  { id: 'M1', type: 'CNC',     pos: [-118, 0,  88], scale: 2.5  },
+  { id: 'M2', type: 'FURNACE', pos: [   0, 0, -168], scale: 2.75 },
+  { id: 'M3', type: 'KILN',    pos: [ 132, 0,  96], scale: 2.6  },
 ];
 
 const STEEL = '#5a6570';
