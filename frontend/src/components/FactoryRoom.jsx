@@ -84,7 +84,7 @@ export default function FactoryRoom() {
 
       {/* ─── CEILING GIRDERS ───────────────────────────────────── */}
       {[-28, -14, 0, 14, 28].map((z) => (
-        <mesh key={`girder-${z}`} position={[0, ROOM_HEIGHT - 1, z]} castShadow>
+        <mesh key={`girder-${z}`} position={[0, ROOM_HEIGHT - 1, z]}>
           <boxGeometry args={[ROOM_WIDTH, 0.6, 0.8]} />
           <meshStandardMaterial color="#0a0d12" roughness={0.85} metalness={0.2} />
         </mesh>
