@@ -68,29 +68,24 @@ function BasePlate({ width, depth }) {
   );
 }
 
-/* NamePlate — dark physical panel bolted to machine front face */
+/* NamePlate — single dark panel bolted to machine front face */
 function NamePlate({ machineId, position }) {
   return (
     <group position={position}>
-      {/* Slightly raised backing plate — inset shadow effect */}
-      <mesh position={[0, 0, -0.05]}>
-        <boxGeometry args={[7.2, 3.2, 0.08]} />
-        <meshStandardMaterial color="#060810" roughness={0.98} metalness={0.05} />
-      </mesh>
-      {/* Main panel */}
+      {/* Single dark panel — no backing plate to avoid cross artifact on curved surfaces */}
       <mesh>
-        <boxGeometry args={[6.8, 2.8, 0.12]} />
+        <boxGeometry args={[8.0, 3.5, 0.18]} />
         <meshStandardMaterial color="#0a0d12" roughness={0.95} metalness={0.05} />
       </mesh>
       {/* Machine ID text */}
-      <Html center distanceFactor={50} style={{ pointerEvents: 'none' }}>
+      <Html center distanceFactor={60} style={{ pointerEvents: 'none' }}>
         <div style={{
-          color: '#dde4ef',
+          color: '#e8eeff',
           fontFamily: 'monospace, Courier New, sans-serif',
           fontWeight: 700,
-          fontSize: 36,
-          letterSpacing: 6,
-          textShadow: '0 0 8px rgba(200,220,255,0.4)',
+          fontSize: 48,
+          letterSpacing: 8,
+          textShadow: '0 0 12px rgba(180,210,255,0.6)',
           userSelect: 'none',
         }}>
           {machineId}
@@ -191,8 +186,8 @@ function FurnaceMachine({ onSelect }) {
         <cylinderGeometry args={[1.5, 1.8, 2.4, 16]} />
         <meshStandardMaterial color={STEEL_DARK} roughness={0.45} metalness={0.55} />
       </mesh>
-      {/* Nameplate on the access panel box on the cylinder front */}
-      <NamePlate machineId="M2" position={[0, 9.2, 5.52]} />
+      {/* Nameplate on the flat access panel box — NOT on the curved cylinder */}
+      <NamePlate machineId="M2" position={[0, 9.2, 5.55]} />
       <GuardRing width={18} depth={18} />
     </group>
   );
@@ -223,8 +218,8 @@ function KilnMachine({ onSelect }) {
         <boxGeometry args={[3.4, 6.6, 6.4]} />
         <meshStandardMaterial color="#5a636c" roughness={0.45} metalness={0.28} />
       </mesh>
-      {/* Nameplate on middle support front face */}
-      <NamePlate machineId="M3" position={[0, 2.5, 3.12]} />
+      {/* Nameplate at cylinder center height on the near support front face */}
+      <NamePlate machineId="M3" position={[0, 5.1, 3.15]} />
       <GuardRing width={30} depth={14} />
     </group>
   );
