@@ -7,28 +7,28 @@ export default function Scene3D() {
     <Canvas
       shadows
       gl={{ antialias: true }}
-      camera={{ position: [0, 2.5, 12], fov: 55 }}
+      camera={{ position: [0, 3.5, 16], fov: 55 }}
       style={{ background: '#08090d', width: '100%', height: '100%' }}
     >
       <ambientLight intensity={0.22} />
 
       <directionalLight
-        position={[12, 16, 10]}
+        position={[14, 22, 12]}
         intensity={1.6}
         color="#ffe8c4"
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
-        shadow-camera-far={80}
-        shadow-camera-left={-30}
-        shadow-camera-right={30}
-        shadow-camera-top={30}
-        shadow-camera-bottom={-30}
+        shadow-camera-far={100}
+        shadow-camera-left={-40}
+        shadow-camera-right={40}
+        shadow-camera-top={40}
+        shadow-camera-bottom={-40}
         shadow-bias={-0.0005}
       />
 
       <directionalLight
-        position={[-12, 8, -8]}
+        position={[-14, 12, -10]}
         intensity={0.3}
         color="#8b95a8"
       />
@@ -36,13 +36,13 @@ export default function Scene3D() {
       <FactoryRoom />
 
       <OrbitControls
-        target={[0, 1.5, 0]}
-        minDistance={3}
-        maxDistance={14}
-        minPolarAngle={Math.PI / 3.2}
-        maxPolarAngle={Math.PI / 2.1}
-        minAzimuthAngle={-Math.PI / 2.5}
-        maxAzimuthAngle={Math.PI / 2.5}
+        target={[0, 3, 0]}
+        minDistance={4}
+        maxDistance={22}
+        minPolarAngle={Math.PI / 6}
+        maxPolarAngle={Math.PI / 2.15}
+        minAzimuthAngle={-Math.PI / 2.2}
+        maxAzimuthAngle={Math.PI / 2.2}
         enablePan={false}
         enableZoom={true}
         enableRotate={true}
