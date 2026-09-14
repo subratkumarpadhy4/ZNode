@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Fog } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import FactoryRoom from './FactoryRoom';
 
 export default function Scene3D() {
