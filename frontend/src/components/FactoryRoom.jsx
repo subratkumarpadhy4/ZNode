@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 
-const ROOM_WIDTH  = 80;
-const ROOM_DEPTH  = 100;
-const ROOM_HEIGHT = 24;
+const ROOM_WIDTH  = 80;   // unchanged
+const ROOM_DEPTH  = 140;  // was 100
+const ROOM_HEIGHT = 32;   // was 24
 
 export default function FactoryRoom() {
   return (
@@ -20,7 +20,7 @@ export default function FactoryRoom() {
           <meshBasicMaterial color="#1e2126" />
         </mesh>
       ))}
-      {[-45, -22, 0, 22, 45].map((z) => (
+      {[-63, -32, 0, 32, 63].map((z) => (
         <mesh key={`jz-${z}`} position={[0, 0.01, z]} rotation={[-Math.PI / 2, 0, 0]}>
           <planeGeometry args={[ROOM_WIDTH, 0.1]} />
           <meshBasicMaterial color="#1e2126" />
@@ -50,7 +50,7 @@ export default function FactoryRoom() {
       </mesh>
 
       {/* ─── MAIN GIRDERS — no castShadow ─────────────── */}
-      {[-40, -20, 0, 20, 40].map((z) => (
+      {[-56, -28, 0, 28, 56].map((z) => (
         <mesh key={`girder-${z}`} position={[0, ROOM_HEIGHT - 1, z]}>
           <boxGeometry args={[ROOM_WIDTH, 0.7, 1.0]} />
           <meshStandardMaterial color="#4a5260" roughness={0.7} metalness={0.35} />
@@ -65,33 +65,33 @@ export default function FactoryRoom() {
         </mesh>
       ))}
 
-      {/* ─── WALL CONDUITS — no castShadow ────────────── */}
+      {/* ─── WALL CONDUITS ────────────────────────────── */}
       {[-32, -12, 12, 32].map((x) => (
         <mesh key={`cond-b-${x}`} position={[x, 8, -ROOM_DEPTH / 2 + 0.5]}>
           <cylinderGeometry args={[0.1, 0.1, 16, 12]} />
           <meshStandardMaterial color="#4a5058" roughness={0.5} metalness={0.6} />
         </mesh>
       ))}
-      {[-32, -12, 12, 32].map((z) => (
+      {[-45, -15, 15, 45].map((z) => (
         <mesh key={`cond-l-${z}`} position={[-ROOM_WIDTH / 2 + 0.5, 8, z]}>
           <cylinderGeometry args={[0.1, 0.1, 16, 12]} />
           <meshStandardMaterial color="#4a5058" roughness={0.5} metalness={0.6} />
         </mesh>
       ))}
-      {[-32, -12, 12, 32].map((z) => (
+      {[-45, -15, 15, 45].map((z) => (
         <mesh key={`cond-r-${z}`} position={[ROOM_WIDTH / 2 - 0.5, 8, z]}>
           <cylinderGeometry args={[0.1, 0.1, 16, 12]} />
           <meshStandardMaterial color="#4a5058" roughness={0.5} metalness={0.6} />
         </mesh>
       ))}
 
-      {/* ─── CEILING FIXTURES (5) — scaled to larger room ─ */}
+      {/* ─── CEILING FIXTURES (5) — scaled to new depth ── */}
       {[
         [  0,   0],
-        [-24, -24],
-        [ 24,  24],
-        [-24,  24],
-        [ 24, -24],
+        [-24, -34],
+        [ 24,  34],
+        [-24,  34],
+        [ 24, -34],
       ].map(([x, z], i) => (
         <group key={`fixture-${i}`}>
           <mesh position={[x, ROOM_HEIGHT - 1.8, z]}>
