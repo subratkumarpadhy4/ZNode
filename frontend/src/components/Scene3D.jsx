@@ -7,13 +7,13 @@ export default function Scene3D() {
     <Canvas
       shadows
       gl={{ antialias: true }}
-      camera={{ position: [0, 4, 16], fov: 50 }}
+      camera={{ position: [0, 8, 12], fov: 55 }}
       style={{ background: '#0a0e1a', width: '100%', height: '100%' }}
     >
-      {/* Low ambient — tube lights do the heavy lifting */}
+      {/* Low ambient — tube lights provide the fill */}
       <ambientLight intensity={0.25} />
 
-      {/* Warm key from upper-right for directionality and shadows */}
+      {/* Warm key from upper-right for directionality */}
       <directionalLight
         position={[12, 20, 10]}
         intensity={1.4}
@@ -39,7 +39,7 @@ export default function Scene3D() {
       <FactoryRoom />
 
       <OrbitControls
-        target={[0, 1.5, 0]}
+        target={[0, 0, 0]}
         minDistance={4}
         maxDistance={22}
         minPolarAngle={Math.PI / 5}
