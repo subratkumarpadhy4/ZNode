@@ -1,8 +1,51 @@
-import { Grid } from '@react-three/drei';
+const ROOM_WIDTH  = 30;
+const ROOM_DEPTH  = 50;
+const ROOM_HEIGHT = 8;
 
-const ROOM_WIDTH  = 30;   // X-axis (left to right)
-const ROOM_DEPTH  = 50;   // Z-axis (front to back)
-const ROOM_HEIGHT = 8;    // Y-axis (floor to ceiling girders)
+// Simple grid-line overlay using line segments — no extend() call, no drei Grid
+function GridLines() {
+  const lines = [];
+
+  // Lines along X axis (Z-spaced)
+  for (let z = -ROOM_DEPTH / 2; z <= ROOM_DEPTH / 2; z += 2) {
+    lines.push(
+      <line key={`z${z}`}>
+        <bufferGeometry
+          attach="geometry"
+          onUpdate={(self) => {
+            const pts = new Float32Array([
+              -ROOM_WIDTH / 2, 0.01, z,
+               ROOM_WIDTH / 2, 0.01, z,
+            ]);
+            self.setAttribute('position', { array: pts, itemSize: 3, count: 2 });
+          }}
+        />
+        <lineBasicMaterial attach="material" color="#1e293b" opacity={0.6} transparent />
+      </line>
+    );
+  }
+
+  // Lines along Z axis (X-spaced)
+  for (let x = -ROOM_WIDTH / 2; x <= ROOM_WIDTH / 2; x += 2) {
+    lines.push(
+      <line key={`x${x}`}>
+        <bufferGeometry
+          attach="geometry"
+          onUpdate={(self) => {
+            const pts = new Float32Array([
+              x, 0.01, -ROOM_DEPTH / 2,
+              x, 0.01,  ROOM_DEPTH / 2,
+            ]);
+            self.setAttribute('position', { array: pts, itemSize: 3, count: 2 });
+          }}
+        />
+        <lineBasicMaterial attach="material" color="#1e293b" opacity={0.6} transparent />
+      </line>
+    );
+  }
+
+  return <group>{lines}</group>;
+}
 
 export default function FactoryRoom() {
   return (
@@ -13,20 +56,8 @@ export default function FactoryRoom() {
         <meshStandardMaterial color="#2d3748" roughness={0.9} metalness={0.05} />
       </mesh>
 
-      {/* GRID OVERLAY */}
-      <Grid
-        args={[ROOM_WIDTH, ROOM_DEPTH]}
-        position={[0, 0.01, 0]}
-        cellSize={2}
-        cellThickness={0.5}
-        cellColor="#1e293b"
-        sectionSize={10}
-        sectionThickness={1}
-        sectionColor="#334155"
-        fadeDistance={60}
-        fadeStrength={1}
-        infiniteGrid={false}
-      />
+      {/* GRID OVERLAY — manual lines, no drei Grid (avoids extend() at module scope crash) */}
+      <GridLines />
 
       {/* BACK WALL (far, negative Z) */}
       <mesh receiveShadow position={[0, ROOM_HEIGHT / 2, -ROOM_DEPTH / 2]}>

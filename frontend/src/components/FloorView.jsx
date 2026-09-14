@@ -1,101 +1,80 @@
-import { useEffect, useRef, useState } from 'react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useStore } from '../store';
 import Scene3D from './Scene3D';
 import MachineFloor from './MachineFloor';
 
-// ── Error boundary to auto-fallback from 3D on WebGL errors ──────────────────
-class Scene3DErrorBoundary extends React.Component {
+class SceneErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, errorMessage: null };
   }
 
-  static getDerivedStateFromError() {
-    return { hasError: true };
+  static getDerivedStateFromError(error) {
+    return { hasError: true, errorMessage: error?.message || 'Unknown error' };
   }
 
-  componentDidCatch(error) {
-    console.warn('Scene3D caught error, falling back to 2D:', error.message);
-    this.props.onError();
+  componentDidCatch(error, info) {
+    console.error('[Scene3D] Runtime error:', error);
+    console.error('[Scene3D] Component stack:', info.componentStack);
   }
 
   render() {
-    if (this.state.hasError) return null;
+    if (this.state.hasError) {
+      return (
+        <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+          <MachineFloor />
+          <div style={{
+            position: 'absolute',
+            bottom: 12,
+            right: 12,
+            background: 'rgba(239, 68, 68, 0.9)',
+            color: '#fff',
+            padding: '8px 14px',
+            borderRadius: 6,
+            fontSize: 12,
+            fontFamily: 'monospace',
+            maxWidth: 500
+          }}>
+            3D scene error: {this.state.errorMessage}
+          </div>
+        </div>
+      );
+    }
     return this.props.children;
   }
 }
 
-// ── FloorView ─────────────────────────────────────────────────────────────────
 export default function FloorView() {
-  const floorView    = useStore((s) => s.floorView);
+  const floorView = useStore((s) => s.floorView);
   const setFloorView = useStore((s) => s.setFloorView);
-  const [notice, setNotice] = useState(null);
-  const fpsRef = useRef({ frames: 0, lastCheck: performance.now() });
 
-  // Mobile default: fall back to 2D
+  // Responsive default: mobile opens in 2D, desktop opens in 3D.
   useEffect(() => {
     if (window.innerWidth < 768 && floorView === '3d') {
       setFloorView('2d');
     }
   }, []);
 
-  // FPS monitor: if rolling avg < 30 over 3 s, switch to 2D
-  useEffect(() => {
-    if (floorView !== '3d') return;
-    let raf;
-    const tick = () => {
-      const now = performance.now();
-      fpsRef.current.frames++;
-      if (now - fpsRef.current.lastCheck >= 3000) {
-        const fps =
-          (fpsRef.current.frames * 1000) /
-          (now - fpsRef.current.lastCheck);
-        fpsRef.current.frames = 0;
-        fpsRef.current.lastCheck = now;
-        if (fps < 30) {
-          setFloorView('2d');
-          setNotice('Switched to 2D view (performance)');
-        }
-      }
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [floorView]);
-
-  function handleScene3DError() {
-    setFloorView('2d');
-    setNotice('Switched to 2D view (error)');
-  }
-
   return (
     <div className="floor-view-container">
-      {/* 3D / 2D toggle */}
       <div className="floor-toggle">
         <button
           className={floorView === '3d' ? 'active' : ''}
-          onClick={() => { setFloorView('3d'); setNotice(null); }}
-        >
-          3D
-        </button>
+          onClick={() => setFloorView('3d')}
+        >3D</button>
         <button
           className={floorView === '2d' ? 'active' : ''}
-          onClick={() => { setFloorView('2d'); setNotice(null); }}
-        >
-          2D
-        </button>
+          onClick={() => setFloorView('2d')}
+        >2D</button>
       </div>
 
       {floorView === '3d' ? (
-        <Scene3DErrorBoundary onError={handleScene3DError}>
+        <SceneErrorBoundary>
           <Scene3D />
-        </Scene3DErrorBoundary>
+        </SceneErrorBoundary>
       ) : (
         <MachineFloor />
       )}
-
-      {notice && <div className="floor-notice">{notice}</div>}
     </div>
   );
 }
