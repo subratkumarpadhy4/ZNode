@@ -1,50 +1,44 @@
+import { useRef, useEffect } from 'react';
+import * as THREE from 'three';
+
 const ROOM_WIDTH  = 30;
 const ROOM_DEPTH  = 50;
 const ROOM_HEIGHT = 8;
 
-// Simple grid-line overlay using line segments — no extend() call, no drei Grid
+// Grid overlay via proper THREE.BufferGeometry with refs
 function GridLines() {
-  const lines = [];
+  const groupRef = useRef();
 
-  // Lines along X axis (Z-spaced)
-  for (let z = -ROOM_DEPTH / 2; z <= ROOM_DEPTH / 2; z += 2) {
-    lines.push(
-      <line key={`z${z}`}>
-        <bufferGeometry
-          attach="geometry"
-          onUpdate={(self) => {
-            const pts = new Float32Array([
-              -ROOM_WIDTH / 2, 0.01, z,
-               ROOM_WIDTH / 2, 0.01, z,
-            ]);
-            self.setAttribute('position', { array: pts, itemSize: 3, count: 2 });
-          }}
-        />
-        <lineBasicMaterial attach="material" color="#1e293b" opacity={0.6} transparent />
-      </line>
-    );
-  }
+  useEffect(() => {
+    if (!groupRef.current) return;
+    const material = new THREE.LineBasicMaterial({ color: '#334155', opacity: 0.5, transparent: true });
 
-  // Lines along Z axis (X-spaced)
-  for (let x = -ROOM_WIDTH / 2; x <= ROOM_WIDTH / 2; x += 2) {
-    lines.push(
-      <line key={`x${x}`}>
-        <bufferGeometry
-          attach="geometry"
-          onUpdate={(self) => {
-            const pts = new Float32Array([
-              x, 0.01, -ROOM_DEPTH / 2,
-              x, 0.01,  ROOM_DEPTH / 2,
-            ]);
-            self.setAttribute('position', { array: pts, itemSize: 3, count: 2 });
-          }}
-        />
-        <lineBasicMaterial attach="material" color="#1e293b" opacity={0.6} transparent />
-      </line>
-    );
-  }
+    // Lines along Z (spaced every 2 on X)
+    for (let x = -ROOM_WIDTH / 2; x <= ROOM_WIDTH / 2; x += 2) {
+      const pts = [new THREE.Vector3(x, 0.02, -ROOM_DEPTH / 2), new THREE.Vector3(x, 0.02, ROOM_DEPTH / 2)];
+      const geo = new THREE.BufferGeometry().setFromPoints(pts);
+      groupRef.current.add(new THREE.Line(geo, material));
+    }
 
-  return <group>{lines}</group>;
+    // Lines along X (spaced every 2 on Z)
+    for (let z = -ROOM_DEPTH / 2; z <= ROOM_DEPTH / 2; z += 2) {
+      const pts = [new THREE.Vector3(-ROOM_WIDTH / 2, 0.02, z), new THREE.Vector3(ROOM_WIDTH / 2, 0.02, z)];
+      const geo = new THREE.BufferGeometry().setFromPoints(pts);
+      groupRef.current.add(new THREE.Line(geo, material));
+    }
+
+    return () => {
+      // cleanup on unmount
+      while (groupRef.current && groupRef.current.children.length > 0) {
+        const child = groupRef.current.children[0];
+        child.geometry.dispose();
+        groupRef.current.remove(child);
+      }
+      material.dispose();
+    };
+  }, []);
+
+  return <group ref={groupRef} />;
 }
 
 export default function FactoryRoom() {
@@ -56,10 +50,10 @@ export default function FactoryRoom() {
         <meshStandardMaterial color="#2d3748" roughness={0.9} metalness={0.05} />
       </mesh>
 
-      {/* GRID OVERLAY — manual lines, no drei Grid (avoids extend() at module scope crash) */}
+      {/* GRID OVERLAY — imperative THREE.js lines via useEffect + ref */}
       <GridLines />
 
-      {/* BACK WALL (far, negative Z) */}
+      {/* BACK WALL */}
       <mesh receiveShadow position={[0, ROOM_HEIGHT / 2, -ROOM_DEPTH / 2]}>
         <boxGeometry args={[ROOM_WIDTH, ROOM_HEIGHT, 0.3]} />
         <meshStandardMaterial color="#1e2a3d" roughness={0.95} metalness={0.0} />
@@ -77,7 +71,7 @@ export default function FactoryRoom() {
         <meshStandardMaterial color="#1e2a3d" roughness={0.95} metalness={0.0} />
       </mesh>
 
-      {/* CEILING GIRDERS — 5 beams spanning the full width */}
+      {/* CEILING GIRDERS — 5 beams */}
       {[-20, -10, 0, 10, 20].map((z) => (
         <mesh key={z} position={[0, ROOM_HEIGHT, z]} castShadow>
           <boxGeometry args={[ROOM_WIDTH, 0.4, 0.6]} />
@@ -85,7 +79,7 @@ export default function FactoryRoom() {
         </mesh>
       ))}
 
-      {/* SUPPORT COLUMNS — 6 columns at inner grid intersections */}
+      {/* SUPPORT COLUMNS — 6 */}
       {[
         [-10, -15],
         [ 10, -15],
