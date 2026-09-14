@@ -2,14 +2,14 @@ import * as THREE from 'three';
 import { Html } from '@react-three/drei';
 import { useStore } from '../store.js';
 
-export const ROOM_WIDTH = 380;
-export const ROOM_DEPTH = 640;
+export const ROOM_WIDTH  = 570;   // was 380 → 1.5×
+export const ROOM_DEPTH  = 960;   // was 640 → 1.5×
 export const ROOM_HEIGHT = 186;   // was 124 → 1.5×
 
 const MACHINE_LAYOUT = [
-  { id: 'M1', type: 'CNC',     pos: [-118, 0,  88], scale: 4.163 },
-  { id: 'M2', type: 'FURNACE', pos: [   0, 0, -168], scale: 4.613 },
-  { id: 'M3', type: 'KILN',    pos: [ 132, 0,  96], scale: 4.275 },
+  { id: 'M1', type: 'CNC',     pos: [-177, 0,  132], scale: 4.163 },
+  { id: 'M2', type: 'FURNACE', pos: [   0, 0, -252], scale: 4.613 },
+  { id: 'M3', type: 'KILN',    pos: [ 198, 0,  144], scale: 4.275 },
 ];
 
 const STEEL = '#5a6570';
@@ -214,7 +214,7 @@ function KilnMachine({ onSelect }) {
 const PIPE_COLOR = '#3d5c66';
 const PIPE_JOINT = '#334e56';
 const HEADER_Y = 3.4;
-const HEADER_Z = 12;
+const HEADER_Z = 18;
 const RISER_TOP = 7.2;
 const PIPE_R = 2.1;
 const BRANCH_R = 1.7;
@@ -316,18 +316,16 @@ export default function FactoryRoom() {
   const incidents = useStore((s) => s.incidents);
   const selectMachine = useStore((s) => s.selectMachine);
 
-  const colXs = [-150, -50, 50, 150];
-  const pillarXs = [-150, 150];
-  const colZs = [-250, -150, -50, 50, 150, 250];
-  const pillarZs = colZs.filter((z) => z !== 250);
-  const bayXs = [-140, -70, 0, 70, 140];
-  const bayZs = [-240, -160, -80, 0, 80, 160, 240];
+  const colXs  = [-225, -75, 75, 225];
+  const colZs  = [-375, -225, -75, 75, 225, 375];
+  const bayXs  = [-210, -105, 0, 105, 210];
+  const bayZs  = [-360, -240, -120, 0, 120, 240, 360];
 
   return (
     <group>
-      {/* Exterior apron so the open bays don't look into a void */}
+      {/* Exterior apron */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.04, 0]}>
-        <planeGeometry args={[900, 1200]} />
+        <planeGeometry args={[1350, 1800]} />
         <meshStandardMaterial color="#5a6270" roughness={0.88} />
       </mesh>
 
@@ -336,34 +334,34 @@ export default function FactoryRoom() {
         <meshStandardMaterial color={CONCRETE} roughness={0.92} metalness={0.02} />
       </mesh>
 
-      {[-150, -75, 0, 75, 150].map((x) => (
+      {[-225, -113, 0, 113, 225].map((x) => (
         <mesh key={`jx-${x}`} position={[x, 0.02, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <planeGeometry args={[0.28, ROOM_DEPTH]} />
           <meshStandardMaterial color="#5a564f" roughness={0.95} />
         </mesh>
       ))}
-      {[-240, -160, -80, 0, 80, 160, 240].map((z) => (
+      {[-360, -240, -120, 0, 120, 240, 360].map((z) => (
         <mesh key={`jz-${z}`} position={[0, 0.02, z]} rotation={[-Math.PI / 2, 0, 0]}>
           <planeGeometry args={[ROOM_WIDTH, 0.28]} />
           <meshStandardMaterial color="#5a564f" roughness={0.95} />
         </mesh>
       ))}
 
-      {[-72, 72].map((x) => (
-        <mesh key={`lane-${x}`} position={[x, 0.03, 16]} rotation={[-Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[0.85, 420]} />
+      {[-108, 108].map((x) => (
+        <mesh key={`lane-${x}`} position={[x, 0.03, 24]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[0.85, 630]} />
           <meshStandardMaterial color="#c9a227" roughness={0.7} />
         </mesh>
       ))}
 
-      {/* Roof deck + bright skylights */}
+      {/* Roof deck + skylights */}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, ROOM_HEIGHT, 0]}>
         <planeGeometry args={[ROOM_WIDTH, ROOM_DEPTH]} />
         <meshStandardMaterial color="#7c848c" roughness={0.82} emissive="#4a525a" emissiveIntensity={0.22} side={THREE.DoubleSide} />
       </mesh>
-      {[-220, -110, 0, 110, 220].map((z) => (
+      {[-330, -165, 0, 165, 330].map((z) => (
         <mesh key={`sky-${z}`} position={[0, ROOM_HEIGHT - 0.04, z]} rotation={[Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[90, 16]} />
+          <planeGeometry args={[135, 24]} />
           <meshStandardMaterial color="#9eb4c4" roughness={0.22} metalness={0.04} emissive="#6a8498" emissiveIntensity={0.18} />
         </mesh>
       ))}
@@ -380,20 +378,19 @@ export default function FactoryRoom() {
         </mesh>
       ))}
 
-      {/* South end: wide open loading bays under a header (camera looks in from here) */}
-      <mesh position={[-168, ROOM_HEIGHT / 2, ROOM_DEPTH / 2]}>
-        <boxGeometry args={[44, ROOM_HEIGHT, 0.55]} />
+      {/* South end: wide open loading bays */}
+      <mesh position={[-252, ROOM_HEIGHT / 2, ROOM_DEPTH / 2]}>
+        <boxGeometry args={[66, ROOM_HEIGHT, 0.55]} />
         <meshStandardMaterial color={WALL} roughness={0.88} />
       </mesh>
-      <mesh position={[168, ROOM_HEIGHT / 2, ROOM_DEPTH / 2]}>
-        <boxGeometry args={[44, ROOM_HEIGHT, 0.55]} />
+      <mesh position={[252, ROOM_HEIGHT / 2, ROOM_DEPTH / 2]}>
+        <boxGeometry args={[66, ROOM_HEIGHT, 0.55]} />
         <meshStandardMaterial color={WALL} roughness={0.88} />
       </mesh>
       <mesh position={[0, ROOM_HEIGHT - 5, ROOM_DEPTH / 2]}>
-        <boxGeometry args={[292, 10, 0.7]} />
+        <boxGeometry args={[438, 10, 0.7]} />
         <meshStandardMaterial color={STEEL} roughness={0.5} metalness={0.28} />
       </mesh>
-
 
       {[
         [0, 1.7, -ROOM_DEPTH / 2 + 0.32, [ROOM_WIDTH, 3.4, 0.1]],
@@ -406,10 +403,10 @@ export default function FactoryRoom() {
         </mesh>
       ))}
 
-      {[-220, -110, 0, 110, 220].map((z) =>
+      {[-330, -165, 0, 165, 330].map((z) =>
         [-1, 1].map((side) => (
           <mesh key={`win-${side}-${z}`} position={[side * (ROOM_WIDTH / 2 - 0.38), 66, z]}>
-            <boxGeometry args={[0.12, 32, 28]} />
+            <boxGeometry args={[0.12, 32, 42]} />
             <meshStandardMaterial
               color="#6a8aa0"
               roughness={0.14}
@@ -421,9 +418,8 @@ export default function FactoryRoom() {
         ))
       )}
 
-      {pillarXs.flatMap((x) => pillarZs.map((z) => (
-        <IColumn key={`col-${x}-${z}`} position={[x, 0, z]} />
-      )))}
+      {/* All pillars/columns removed */}
+
 
       {colZs.map((z) => (
         <mesh key={`girder-${z}`} position={[0, ROOM_HEIGHT - 1.4, z]}>
