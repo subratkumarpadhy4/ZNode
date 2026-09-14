@@ -65,7 +65,7 @@ export default function Scene3D() {
         <FactoryRoom floorBright={floorBright} />
 
         <OrbitControls
-          target={[0, 20, -80]}
+          target={[0, 20, 0]}
           minDistance={50}
           maxDistance={165}
           minPolarAngle={Math.PI / 4}
