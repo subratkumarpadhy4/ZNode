@@ -66,11 +66,13 @@ export default function Scene3D() {
 
         <OrbitControls
           target={[0, 0, -100]}
-          minDistance={18}
-          maxDistance={520}
-          minPolarAngle={Math.PI / 14}
-          maxPolarAngle={Math.PI / 2.12}
-          enablePan
+          minDistance={40}
+          maxDistance={380}
+          minPolarAngle={Math.PI / 5}
+          maxPolarAngle={Math.PI / 2.3}
+          minAzimuthAngle={-Math.PI / 2.5}
+          maxAzimuthAngle={Math.PI / 2.5}
+          enablePan={false}
           enableZoom
           enableRotate
         />
