@@ -2,47 +2,35 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import FactoryRoom from './FactoryRoom';
 
-// Room dimensions (must match FactoryRoom.jsx)
-const ROOM_HEIGHT = 45;
-
 export default function Scene3D() {
   return (
     <Canvas
       shadows
       gl={{ antialias: true }}
-      camera={{ position: [0, 8, 30], fov: 55 }}
+      camera={{ position: [0, 12, 40], fov: 55 }}
       style={{ background: '#08090d', width: '100%', height: '100%' }}
     >
       <ambientLight intensity={0.3} />
 
-      {/* Key — fill only, no castShadow */}
-      <directionalLight position={[15, 28, 12]} intensity={0.8} color="#fff3dd" />
+      {/* Key — fill only */}
+      <directionalLight position={[20, 40, 18]} intensity={0.8} color="#fff3dd" />
 
       {/* Cool fill */}
-      <directionalLight position={[-18, 18, -15]} intensity={0.22} color="#8b95a8" />
+      <directionalLight position={[-25, 20, -20]} intensity={0.22} color="#8b95a8" />
 
-      {/* Five point lights at y = ROOM_HEIGHT - 6, matching fixture positions */}
-      <pointLight position={[  0, 39,   0]} intensity={200} distance={100} decay={1.4} color="#fff3dd" />
-      <pointLight position={[-24, 39, -75]} intensity={120} distance={100} decay={1.4} color="#fff3dd" />
-      <pointLight position={[ 24, 39,  75]} intensity={120} distance={100} decay={1.4} color="#fff3dd" />
-      <pointLight position={[-24, 39,  75]} intensity={100} distance={100} decay={1.4} color="#fff3dd" />
-      <pointLight position={[ 24, 39, -75]} intensity={100} distance={100} decay={1.4} color="#fff3dd" />
+      {/* Five point lights — y = ROOM_HEIGHT - 6 = 62, matching fixture positions */}
+      <pointLight position={[  0, 62,   0]} intensity={300} distance={140} decay={1.4} color="#fff3dd" />
+      <pointLight position={[-36, 62, -75]} intensity={180} distance={140} decay={1.4} color="#fff3dd" />
+      <pointLight position={[ 36, 62,  75]} intensity={180} distance={140} decay={1.4} color="#fff3dd" />
+      <pointLight position={[-36, 62,  75]} intensity={150} distance={140} decay={1.4} color="#fff3dd" />
+      <pointLight position={[ 36, 62, -75]} intensity={150} distance={140} decay={1.4} color="#fff3dd" />
 
       <FactoryRoom />
 
-      {/*
-        Camera confinement rules:
-        - minPolarAngle  Math.PI/2.2 (~82°) — camera cannot look too steeply down from above
-          (prevents rising above the ceiling and seeing the black void on top)
-        - maxPolarAngle  Math.PI/2.05 (~88°) — camera stays above the floor
-        - minAzimuthAngle / maxAzimuthAngle  ±60° — prevents orbiting to see outside the side walls
-        - maxDistance 30 — camera cannot pull far enough back to exit the front wall
-        - enablePan false — panning would let the user drift outside the room
-      */}
       <OrbitControls
-        target={[0, 5, 0]}
-        minDistance={5}
-        maxDistance={80}
+        target={[0, 8, 0]}
+        minDistance={8}
+        maxDistance={120}
         minPolarAngle={Math.PI / 6}
         maxPolarAngle={Math.PI / 1.8}
         enablePan={false}

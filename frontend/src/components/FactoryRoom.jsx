@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 
-const ROOM_WIDTH  = 80;   // unchanged
-const ROOM_DEPTH  = 300;  // was 200 → 1.5×
-const ROOM_HEIGHT = 45;   // unchanged
+const ROOM_WIDTH  = 120;  // was 80  → 1.5×
+const ROOM_DEPTH  = 300;  // unchanged
+const ROOM_HEIGHT = 68;   // was 45  → 1.5×
 
 export default function FactoryRoom() {
   return (
@@ -14,7 +14,7 @@ export default function FactoryRoom() {
       </mesh>
 
       {/* ─── FLOOR JOINT LINES ─────────────────────────── */}
-      {[-35, -18, 0, 18, 35].map((x) => (
+      {[-52, -27, 0, 27, 52].map((x) => (
         <mesh key={`jx-${x}`} position={[x, 0.01, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <planeGeometry args={[0.1, ROOM_DEPTH]} />
           <meshBasicMaterial color="#1e2126" />
@@ -57,35 +57,37 @@ export default function FactoryRoom() {
       {/* ─── MAIN GIRDERS — no castShadow ─────────────── */}
       {[-120, -60, 0, 60, 120].map((z) => (
         <mesh key={`girder-${z}`} position={[0, ROOM_HEIGHT - 1, z]}>
-          <boxGeometry args={[ROOM_WIDTH, 0.7, 1.2]} />
+          <boxGeometry args={[ROOM_WIDTH, 1.0, 1.6]} />
           <meshStandardMaterial color="#4a5260" roughness={0.7} metalness={0.35} />
         </mesh>
       ))}
 
       {/* ─── CROSS BEAMS — no castShadow ──────────────── */}
-      {[-32, -16, 16, 32].map((x) => (
-        <mesh key={`cross-${x}`} position={[x, ROOM_HEIGHT - 0.7, 0]}>
-          <boxGeometry args={[0.6, 0.5, ROOM_DEPTH]} />
+      {[-48, -24, 24, 48].map((x) => (
+        <mesh key={`cross-${x}`} position={[x, ROOM_HEIGHT - 0.8, 0]}>
+          <boxGeometry args={[0.8, 0.7, ROOM_DEPTH]} />
           <meshStandardMaterial color="#4a5260" roughness={0.7} metalness={0.35} />
         </mesh>
       ))}
 
-      {/* ─── WALL CONDUITS ────────────────────────────── */}
-      {[-32, -12, 12, 32].map((x) => (
-        <mesh key={`cond-b-${x}`} position={[x, 10, -ROOM_DEPTH / 2 + 0.5]}>
-          <cylinderGeometry args={[0.12, 0.12, 20, 12]} />
+      {/* ─── BACK WALL CONDUITS ────────────────────────── */}
+      {[-48, -18, 18, 48].map((x) => (
+        <mesh key={`cond-b-${x}`} position={[x, 14, -ROOM_DEPTH / 2 + 0.5]}>
+          <cylinderGeometry args={[0.15, 0.15, 28, 12]} />
           <meshStandardMaterial color="#4a5058" roughness={0.5} metalness={0.6} />
         </mesh>
       ))}
+      {/* ─── LEFT WALL CONDUITS ────────────────────────── */}
       {[-105, -52, 0, 52, 105].map((z) => (
-        <mesh key={`cond-l-${z}`} position={[-ROOM_WIDTH / 2 + 0.5, 10, z]}>
-          <cylinderGeometry args={[0.12, 0.12, 20, 12]} />
+        <mesh key={`cond-l-${z}`} position={[-ROOM_WIDTH / 2 + 0.5, 14, z]}>
+          <cylinderGeometry args={[0.15, 0.15, 28, 12]} />
           <meshStandardMaterial color="#4a5058" roughness={0.5} metalness={0.6} />
         </mesh>
       ))}
+      {/* ─── RIGHT WALL CONDUITS ───────────────────────── */}
       {[-105, -52, 0, 52, 105].map((z) => (
-        <mesh key={`cond-r-${z}`} position={[ROOM_WIDTH / 2 - 0.5, 10, z]}>
-          <cylinderGeometry args={[0.12, 0.12, 20, 12]} />
+        <mesh key={`cond-r-${z}`} position={[ROOM_WIDTH / 2 - 0.5, 14, z]}>
+          <cylinderGeometry args={[0.15, 0.15, 28, 12]} />
           <meshStandardMaterial color="#4a5058" roughness={0.5} metalness={0.6} />
         </mesh>
       ))}
@@ -93,18 +95,18 @@ export default function FactoryRoom() {
       {/* ─── CEILING FIXTURES (5) ──────────────────────── */}
       {[
         [  0,   0],
-        [-24, -75],
-        [ 24,  75],
-        [-24,  75],
-        [ 24, -75],
+        [-36, -75],
+        [ 36,  75],
+        [-36,  75],
+        [ 36, -75],
       ].map(([x, z], i) => (
         <group key={`fixture-${i}`}>
-          <mesh position={[x, ROOM_HEIGHT - 1.8, z]}>
-            <boxGeometry args={[3.0, 0.5, 0.8]} />
+          <mesh position={[x, ROOM_HEIGHT - 2.2, z]}>
+            <boxGeometry args={[4.0, 0.6, 1.0]} />
             <meshStandardMaterial color="#1a1d24" roughness={0.6} metalness={0.4} />
           </mesh>
-          <mesh position={[x, ROOM_HEIGHT - 2.1, z]}>
-            <boxGeometry args={[2.8, 0.1, 0.4]} />
+          <mesh position={[x, ROOM_HEIGHT - 2.6, z]}>
+            <boxGeometry args={[3.6, 0.12, 0.5]} />
             <meshBasicMaterial color="#fff8e0" />
           </mesh>
         </group>
