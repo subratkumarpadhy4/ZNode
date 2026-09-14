@@ -94,6 +94,18 @@ export default function FactoryRoom() {
       {[-21, -7, 7, 21].map((z) => (
         <TubeLight key={`tube-${z}`} position={[0, ROOM_HEIGHT - 1.1, z]} />
       ))}
+
+      {/* ─── CHANGE 3 — ceiling fixture discs above each point light ── */}
+      {[0, -15, 15].map((x, i) => (
+        <mesh
+          key={`fixture-${i}`}
+          position={[x, 19.7, i === 0 ? 0 : i === 1 ? -15 : 15]}
+          rotation={[Math.PI / 2, 0, 0]}
+        >
+          <circleGeometry args={[0.6, 24]} />
+          <meshBasicMaterial color="#fff8e0" />
+        </mesh>
+      ))}
     </group>
   );
 }
