@@ -39,7 +39,7 @@ export default function Scene3D() {
       <Canvas
         shadows
         gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 0.95 }}
-        camera={{ position: [0, 18, 215], fov: 50, near: 0.8, far: 3600 }}
+        camera={{ position: [0, 65, 190], fov: 50, near: 0.8, far: 3600 }}
         style={{ background: '#5c6b7a', width: '100%', height: '100%' }}
       >
         <hemisphereLight args={['#c8d8e8', '#5a6068', 0.52]} />
@@ -65,7 +65,7 @@ export default function Scene3D() {
         <FactoryRoom floorBright={floorBright} />
 
         <OrbitControls
-          target={[0, 10, -168]}
+          target={[0, 5, -20]}
           minDistance={18}
           maxDistance={520}
           minPolarAngle={Math.PI / 14}
