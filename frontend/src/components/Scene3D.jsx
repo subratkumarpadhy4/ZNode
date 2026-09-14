@@ -7,15 +7,15 @@ export default function Scene3D() {
     <Canvas
       shadows
       gl={{ antialias: true }}
-      camera={{ position: [0, 3, 14], fov: 55 }}
-      style={{ background: '#0a0e1a', width: '100%', height: '100%' }}
+      camera={{ position: [0, 2.5, 12], fov: 55 }}
+      style={{ background: '#08090d', width: '100%', height: '100%' }}
     >
-      <ambientLight intensity={0.6} />
+      <ambientLight intensity={0.22} />
 
       <directionalLight
-        position={[10, 14, 8]}
-        intensity={1.2}
-        color="#f1f5f9"
+        position={[12, 16, 10]}
+        intensity={1.6}
+        color="#ffe8c4"
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -28,15 +28,15 @@ export default function Scene3D() {
       />
 
       <directionalLight
-        position={[-10, 8, -10]}
-        intensity={0.4}
-        color="#64748b"
+        position={[-12, 8, -8]}
+        intensity={0.3}
+        color="#8b95a8"
       />
 
       <FactoryRoom />
 
       <OrbitControls
-        target={[0, 2, 0]}
+        target={[0, 1.5, 0]}
         minDistance={3}
         maxDistance={14}
         minPolarAngle={Math.PI / 3.2}
