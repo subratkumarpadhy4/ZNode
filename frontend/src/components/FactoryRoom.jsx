@@ -394,18 +394,10 @@ export default function FactoryRoom({ floorBright = false }) {
         <meshStandardMaterial color={WALL} roughness={0.88} metalness={0.02} side={THREE.DoubleSide} />
       </mesh>
 
-      {/* South end: wide open loading bays under a header (camera looks in from here) */}
-      <mesh position={[-168, ROOM_HEIGHT / 2, ROOM_DEPTH / 2]}>
-        <boxGeometry args={[44, ROOM_HEIGHT, 0.55]} />
-        <meshStandardMaterial color={WALL} roughness={0.88} />
-      </mesh>
-      <mesh position={[168, ROOM_HEIGHT / 2, ROOM_DEPTH / 2]}>
-        <boxGeometry args={[44, ROOM_HEIGHT, 0.55]} />
-        <meshStandardMaterial color={WALL} roughness={0.88} />
-      </mesh>
-      <mesh position={[0, ROOM_HEIGHT - 5, ROOM_DEPTH / 2]}>
-        <boxGeometry args={[292, 10, 0.7]} />
-        <meshStandardMaterial color={STEEL} roughness={0.5} metalness={0.28} />
+      {/* South wall — sealed for full 360° interior orbit */}
+      <mesh receiveShadow position={[0, ROOM_HEIGHT / 2, ROOM_DEPTH / 2]}>
+        <boxGeometry args={[ROOM_WIDTH, ROOM_HEIGHT, 0.55]} />
+        <meshStandardMaterial color={WALL} roughness={0.88} metalness={0.02} side={THREE.DoubleSide} />
       </mesh>
 
 
