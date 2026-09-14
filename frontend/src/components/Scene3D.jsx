@@ -40,13 +40,11 @@ export default function Scene3D() {
         - enablePan false — panning would let the user drift outside the room
       */}
       <OrbitControls
-        target={[0, 3, 0]}
-        minDistance={6}
-        maxDistance={30}
-        minPolarAngle={Math.PI / 4}
-        maxPolarAngle={Math.PI / 1.95}
-        minAzimuthAngle={-Math.PI / 3}
-        maxAzimuthAngle={Math.PI / 3}
+        target={[0, 5, 0]}
+        minDistance={5}
+        maxDistance={80}
+        minPolarAngle={Math.PI / 6}
+        maxPolarAngle={Math.PI / 1.8}
         enablePan={false}
         enableZoom={true}
         enableRotate={true}

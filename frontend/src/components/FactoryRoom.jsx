@@ -36,22 +36,22 @@ export default function FactoryRoom() {
       {/* ─── BACK WALL ─────────────────────────────────── */}
       <mesh receiveShadow position={[0, ROOM_HEIGHT / 2, -ROOM_DEPTH / 2]}>
         <boxGeometry args={[ROOM_WIDTH, ROOM_HEIGHT, 0.4]} />
-        <meshStandardMaterial color="#3a3f47" roughness={0.9} metalness={0.05} />
+        <meshStandardMaterial color="#3a3f47" roughness={0.9} metalness={0.05} side={THREE.DoubleSide} />
       </mesh>
       {/* ─── LEFT WALL ─────────────────────────────────── */}
       <mesh receiveShadow position={[-ROOM_WIDTH / 2, ROOM_HEIGHT / 2, 0]}>
         <boxGeometry args={[0.4, ROOM_HEIGHT, ROOM_DEPTH]} />
-        <meshStandardMaterial color="#3a3f47" roughness={0.9} metalness={0.05} />
+        <meshStandardMaterial color="#3a3f47" roughness={0.9} metalness={0.05} side={THREE.DoubleSide} />
       </mesh>
       {/* ─── RIGHT WALL ────────────────────────────────── */}
       <mesh receiveShadow position={[ROOM_WIDTH / 2, ROOM_HEIGHT / 2, 0]}>
         <boxGeometry args={[0.4, ROOM_HEIGHT, ROOM_DEPTH]} />
-        <meshStandardMaterial color="#3a3f47" roughness={0.9} metalness={0.05} />
+        <meshStandardMaterial color="#3a3f47" roughness={0.9} metalness={0.05} side={THREE.DoubleSide} />
       </mesh>
-      {/* ─── FRONT WALL (behind camera start) ──────────── */}
+      {/* ─── FRONT WALL ────────────────────────────────── */}
       <mesh receiveShadow position={[0, ROOM_HEIGHT / 2, ROOM_DEPTH / 2]}>
         <boxGeometry args={[ROOM_WIDTH, ROOM_HEIGHT, 0.4]} />
-        <meshStandardMaterial color="#3a3f47" roughness={0.9} metalness={0.05} />
+        <meshStandardMaterial color="#3a3f47" roughness={0.9} metalness={0.05} side={THREE.DoubleSide} />
       </mesh>
 
       {/* ─── MAIN GIRDERS — no castShadow ─────────────── */}
