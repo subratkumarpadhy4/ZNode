@@ -5,41 +5,48 @@ import FactoryRoom from './FactoryRoom';
 export default function Scene3D() {
   return (
     <Canvas
-      camera={{ position: [8, 8, 12], fov: 50 }}
       shadows
       gl={{ antialias: true }}
-      style={{ background: '#0a0e1a', width: '100%', height: '100%' }}
+      camera={{ position: [0, 1.8, 14], fov: 50 }}
+      style={{ background: '#08090d', width: '100%', height: '100%' }}
     >
-      {/* Main ambient fill */}
-      <ambientLight intensity={0.45} />
+      {/* Ambient — very low, just prevents pure black */}
+      <ambientLight intensity={0.12} />
 
-      {/* Key light — upper right front */}
+      {/* Key light — warm white, from above and slightly right */}
       <directionalLight
-        position={[15, 25, 10]}
-        intensity={1.6}
+        position={[6, 14, 10]}
+        intensity={1.2}
+        color="#f8fafc"
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
-        shadow-camera-far={100}
-        shadow-camera-left={-40}
-        shadow-camera-right={40}
-        shadow-camera-top={40}
-        shadow-camera-bottom={-40}
+        shadow-camera-far={80}
+        shadow-camera-left={-25}
+        shadow-camera-right={25}
+        shadow-camera-top={25}
+        shadow-camera-bottom={-25}
+        shadow-bias={-0.0005}
       />
 
-      {/* Fill light — opposite side to reduce harsh shadows */}
-      <directionalLight position={[-15, 15, -10]} intensity={0.4} />
+      {/* Fill light — cool, dim, from opposite side */}
+      <directionalLight
+        position={[-8, 8, -6]}
+        intensity={0.25}
+        color="#64748b"
+      />
 
       <FactoryRoom />
 
       <OrbitControls
+        target={[0, 1, 0]}
+        minDistance={5}
+        maxDistance={25}
+        minPolarAngle={Math.PI / 8}
+        maxPolarAngle={Math.PI / 2.3}
         enablePan={true}
         enableZoom={true}
         enableRotate={true}
-        maxPolarAngle={Math.PI / 2.1}
-        minDistance={5}
-        maxDistance={60}
-        target={[0, 1, 0]}
       />
     </Canvas>
   );
