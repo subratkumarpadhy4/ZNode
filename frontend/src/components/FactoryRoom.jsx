@@ -4,12 +4,12 @@ import { useStore } from '../store.js';
 
 export const ROOM_WIDTH = 380;
 export const ROOM_DEPTH = 640;
-export const ROOM_HEIGHT = 124;
+export const ROOM_HEIGHT = 186;   // was 124 → 1.5×
 
 const MACHINE_LAYOUT = [
-  { id: 'M1', type: 'CNC',     pos: [-118, 0,  88], scale: 2.775 },
-  { id: 'M2', type: 'FURNACE', pos: [   0, 0, -168], scale: 3.075 },
-  { id: 'M3', type: 'KILN',    pos: [ 132, 0,  96], scale: 2.85  },
+  { id: 'M1', type: 'CNC',     pos: [-118, 0,  88], scale: 4.163 },
+  { id: 'M2', type: 'FURNACE', pos: [   0, 0, -168], scale: 4.613 },
+  { id: 'M3', type: 'KILN',    pos: [ 132, 0,  96], scale: 4.275 },
 ];
 
 const STEEL = '#5a6570';
@@ -408,7 +408,7 @@ export default function FactoryRoom() {
 
       {[-220, -110, 0, 110, 220].map((z) =>
         [-1, 1].map((side) => (
-          <mesh key={`win-${side}-${z}`} position={[side * (ROOM_WIDTH / 2 - 0.38), 44, z]}>
+          <mesh key={`win-${side}-${z}`} position={[side * (ROOM_WIDTH / 2 - 0.38), 66, z]}>
             <boxGeometry args={[0.12, 32, 28]} />
             <meshStandardMaterial
               color="#6a8aa0"
