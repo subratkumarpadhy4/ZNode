@@ -43,8 +43,8 @@ export default function Scene3D() {
         target={[0, 3, 0]}
         minDistance={6}
         maxDistance={30}
-        minPolarAngle={Math.PI / 2.2}
-        maxPolarAngle={Math.PI / 2.05}
+        minPolarAngle={Math.PI / 4}
+        maxPolarAngle={Math.PI / 1.95}
         minAzimuthAngle={-Math.PI / 3}
         maxAzimuthAngle={Math.PI / 3}
         enablePan={false}
