@@ -33,7 +33,7 @@ export default function FactoryRoom() {
         <meshStandardMaterial color="#2a2e35" roughness={0.95} side={THREE.DoubleSide} />
       </mesh>
 
-      {/* ─── WALLS (lighter than before, catch light) ───── */}
+      {/* ─── WALLS (lighter, catch light) ──────────────── */}
       <mesh receiveShadow position={[0, ROOM_HEIGHT / 2, -ROOM_DEPTH / 2]}>
         <boxGeometry args={[ROOM_WIDTH, ROOM_HEIGHT, 0.4]} />
         <meshStandardMaterial color="#3a3f47" roughness={0.9} metalness={0.05} />

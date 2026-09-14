@@ -37,9 +37,7 @@ export default function Scene3D() {
       />
 
       {/* Five overhead point lights matching the fixtures */}
-      {/* Center — strongest */}
-      <pointLight position={[0, 17, 0]}     intensity={50} distance={32} decay={2} color="#fff3dd" castShadow />
-      {/* Flanking pairs */}
+      <pointLight position={[  0, 17,   0]} intensity={50} distance={32} decay={2} color="#fff3dd" castShadow />
       <pointLight position={[-15, 17, -15]} intensity={35} distance={26} decay={2} color="#fff3dd" />
       <pointLight position={[ 15, 17,  15]} intensity={35} distance={26} decay={2} color="#fff3dd" />
       <pointLight position={[-15, 17,  15]} intensity={28} distance={24} decay={2} color="#fff3dd" />
