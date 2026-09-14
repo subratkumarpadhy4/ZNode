@@ -15,7 +15,7 @@ const MACHINE_LAYOUT = [
 const STEEL = '#5a6570';
 const STEEL_DARK = '#454e57';
 const CONCRETE = '#8a857b';
-const WALL = '#b7b0a4';
+const WALL = '#7a7670';
 const DADO = '#4e5c68';
 
 function statusColor(machine, incident) {
@@ -37,14 +37,17 @@ function beaconGlow(machine, incident) {
 function StatusBeacon({ color, intensity, distance, y }) {
   return (
     <group position={[0, y, 0]}>
-      <mesh position={[0, 0.85, 0]}>
-        <cylinderGeometry args={[0.22, 0.34, 0.42, 12]} />
+      {/* Fixture housing */}
+      <mesh position={[0, 1.8, 0]}>
+        <cylinderGeometry args={[0.7, 0.9, 1.2, 14]} />
         <meshStandardMaterial color="#1a1f26" roughness={0.82} metalness={0.15} />
       </mesh>
+      {/* Emissive beacon globe */}
       <mesh position={[0, 0, 0]}>
-        <sphereGeometry args={[0.42, 20, 20]} />
+        <sphereGeometry args={[1.3, 24, 24]} />
         <meshBasicMaterial color={color} toneMapped={false} />
       </mesh>
+      {/* Glow point light illuminates machine below */}
       <pointLight
         position={[0, 0, 0]}
         color={color}
@@ -68,21 +71,23 @@ function BasePlate({ width, depth }) {
 function MachineLabel({ machineId, type, machine, color, y = 16 }) {
   const kw = machine ? `${(machine.metrics?.excess_kw ?? 0).toFixed(1)} kW` : '— kW';
   return (
-    <Html position={[0, y, 0]} center distanceFactor={28} style={{ pointerEvents: 'none' }}>
+    <Html position={[0, y, 0]} center distanceFactor={55} style={{ pointerEvents: 'none' }}>
       <div style={{
-        background: 'rgba(255,255,255,0.95)',
+        background: 'rgba(10,14,26,0.94)',
         border: `3px solid ${color}`,
-        borderRadius: 8,
-        padding: '10px 16px',
-        color: '#0f172a',
+        borderRadius: 10,
+        padding: '12px 22px',
+        color: '#f1f5f9',
         fontFamily: 'Segoe UI, system-ui, sans-serif',
         whiteSpace: 'nowrap',
-        boxShadow: '0 10px 28px rgba(15,23,42,0.16)',
+        boxShadow: `0 0 24px ${color}55`,
+        minWidth: 140,
+        textAlign: 'center',
       }}>
-        <div style={{ color: '#64748b', fontSize: 12, letterSpacing: 0.8, fontWeight: 600 }}>
+        <div style={{ color: '#94a3b8', fontSize: 15, letterSpacing: 1, fontWeight: 600 }}>
           {machineId} · {type}
         </div>
-        <div style={{ color, fontWeight: 700, fontSize: 20 }}>{kw}</div>
+        <div style={{ color, fontWeight: 800, fontSize: 28, marginTop: 4 }}>{kw}</div>
       </div>
     </Html>
   );
@@ -213,11 +218,11 @@ function KilnMachine({ onSelect }) {
 
 const PIPE_COLOR = '#3d5c66';
 const PIPE_JOINT = '#334e56';
-const HEADER_Y = 3.4;
+const HEADER_Y = 6.0;
 const HEADER_Z = 12;
-const RISER_TOP = 7.2;
-const PIPE_R = 2.1;
-const BRANCH_R = 1.7;
+const RISER_TOP = 14.0;
+const PIPE_R = 3.5;
+const BRANCH_R = 2.8;
 
 function PipeMaterial({ joint = false }) {
   return (
@@ -359,7 +364,7 @@ export default function FactoryRoom() {
       {/* Roof deck + bright skylights */}
       <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, ROOM_HEIGHT, 0]}>
         <planeGeometry args={[ROOM_WIDTH, ROOM_DEPTH]} />
-        <meshStandardMaterial color="#7c848c" roughness={0.82} emissive="#4a525a" emissiveIntensity={0.22} side={THREE.DoubleSide} />
+        <meshStandardMaterial color="#4a5058" roughness={0.88} emissive="#2a3038" emissiveIntensity={0.06} side={THREE.DoubleSide} />
       </mesh>
       {[-220, -110, 0, 110, 220].map((z) => (
         <mesh key={`sky-${z}`} position={[0, ROOM_HEIGHT - 0.04, z]} rotation={[Math.PI / 2, 0, 0]}>

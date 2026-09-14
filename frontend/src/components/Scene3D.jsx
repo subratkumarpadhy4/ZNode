@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import FactoryRoom from './FactoryRoom';
@@ -6,36 +7,41 @@ export default function Scene3D() {
   return (
     <Canvas
       shadows
-      gl={{ antialias: true }}
-      camera={{ position: [0, 12, 40], fov: 55 }}
-      style={{ background: '#08090d', width: '100%', height: '100%' }}
+      gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 0.95 }}
+      camera={{ position: [0, 18, 215], fov: 50, near: 0.8, far: 3600 }}
+      style={{ background: '#7a8fa3', width: '100%', height: '100%' }}
     >
-      <ambientLight intensity={0.3} />
+      <hemisphereLight args={['#d5e0ea', '#6a6e72', 0.52]} />
+      <ambientLight intensity={0.3} color="#dce3ea" />
 
-      {/* Key — fill only */}
-      <directionalLight position={[20, 40, 18]} intensity={0.8} color="#fff3dd" />
-
-      {/* Cool fill */}
-      <directionalLight position={[-25, 20, -20]} intensity={0.22} color="#8b95a8" />
-
-      {/* Five point lights — y = ROOM_HEIGHT - 6 = 62, matching fixture positions */}
-      <pointLight position={[  0, 62,   0]} intensity={300} distance={140} decay={1.4} color="#fff3dd" />
-      <pointLight position={[-36, 62, -75]} intensity={180} distance={140} decay={1.4} color="#fff3dd" />
-      <pointLight position={[ 36, 62,  75]} intensity={180} distance={140} decay={1.4} color="#fff3dd" />
-      <pointLight position={[-36, 62,  75]} intensity={150} distance={140} decay={1.4} color="#fff3dd" />
-      <pointLight position={[ 36, 62, -75]} intensity={150} distance={140} decay={1.4} color="#fff3dd" />
+      <directionalLight
+        position={[110, 150, 80]}
+        intensity={0.82}
+        color="#f2f4f6"
+        castShadow
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
+        shadow-camera-far={780}
+        shadow-camera-left={-320}
+        shadow-camera-right={320}
+        shadow-camera-top={360}
+        shadow-camera-bottom={-360}
+        shadow-bias={-0.0002}
+      />
+      <directionalLight position={[-80, 50, -50]} intensity={0.24} color="#b7c9d8" />
+      <directionalLight position={[0, 28, 220]} intensity={0.16} color="#c5d4e0" />
 
       <FactoryRoom />
 
       <OrbitControls
-        target={[0, 8, 0]}
-        minDistance={8}
-        maxDistance={120}
-        minPolarAngle={Math.PI / 6}
-        maxPolarAngle={Math.PI / 1.8}
-        enablePan={false}
-        enableZoom={true}
-        enableRotate={true}
+        target={[0, 10, -168]}
+        minDistance={18}
+        maxDistance={520}
+        minPolarAngle={Math.PI / 14}
+        maxPolarAngle={Math.PI / 2.12}
+        enablePan
+        enableZoom
+        enableRotate
       />
     </Canvas>
   );
