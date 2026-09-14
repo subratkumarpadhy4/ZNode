@@ -51,7 +51,7 @@ export default function FactoryRoom() {
       {[-28, -14, 0, 14, 28].map((z) => (
         <mesh key={`girder-${z}`} position={[0, ROOM_HEIGHT - 1, z]} castShadow>
           <boxGeometry args={[ROOM_WIDTH, 0.7, 1.0]} />
-          <meshStandardMaterial color="#232730" roughness={0.82} metalness={0.25} />
+          <meshStandardMaterial color="#4a5260" roughness={0.7} metalness={0.35} />
         </mesh>
       ))}
 
@@ -59,7 +59,7 @@ export default function FactoryRoom() {
       {[-20, -10, 10, 20].map((x) => (
         <mesh key={`cross-${x}`} position={[x, ROOM_HEIGHT - 0.7, 0]} castShadow>
           <boxGeometry args={[0.6, 0.5, ROOM_DEPTH]} />
-          <meshStandardMaterial color="#232730" roughness={0.82} metalness={0.25} />
+          <meshStandardMaterial color="#4a5260" roughness={0.7} metalness={0.35} />
         </mesh>
       ))}
 

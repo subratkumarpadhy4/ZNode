@@ -10,8 +10,8 @@ export default function Scene3D() {
       camera={{ position: [0, 4, 18], fov: 55 }}
       style={{ background: '#08090d', width: '100%', height: '100%' }}
     >
-      {/* Low ambient — makes walls readable, prevents pure black */}
-      <ambientLight intensity={0.22} />
+      {/* Ambient raised to 0.3 — girders catch it, ceiling visible */}
+      <ambientLight intensity={0.3} />
 
       {/* Key light from upper-right, inside the room */}
       <directionalLight
@@ -29,19 +29,15 @@ export default function Scene3D() {
         shadow-bias={-0.0004}
       />
 
-      {/* Cool fill from opposite side, weak */}
-      <directionalLight
-        position={[-14, 10, -12]}
-        intensity={0.22}
-        color="#8b95a8"
-      />
+      {/* Cool fill from opposite side */}
+      <directionalLight position={[-14, 10, -12]} intensity={0.22} color="#8b95a8" />
 
-      {/* Five overhead point lights matching the fixtures */}
-      <pointLight position={[  0, 17,   0]} intensity={50} distance={32} decay={2} color="#fff3dd" castShadow />
-      <pointLight position={[-15, 17, -15]} intensity={35} distance={26} decay={2} color="#fff3dd" />
-      <pointLight position={[ 15, 17,  15]} intensity={35} distance={26} decay={2} color="#fff3dd" />
-      <pointLight position={[-15, 17,  15]} intensity={28} distance={24} decay={2} color="#fff3dd" />
-      <pointLight position={[ 15, 17, -15]} intensity={28} distance={24} decay={2} color="#fff3dd" />
+      {/* Five overhead point lights — decay 1.4 reaches floor from y=17 */}
+      <pointLight position={[  0, 17,   0]} intensity={150} distance={40} decay={1.4} color="#fff3dd" castShadow />
+      <pointLight position={[-15, 17, -15]} intensity={90}  distance={32} decay={1.4} color="#fff3dd" />
+      <pointLight position={[ 15, 17,  15]} intensity={90}  distance={32} decay={1.4} color="#fff3dd" />
+      <pointLight position={[-15, 17,  15]} intensity={70}  distance={30} decay={1.4} color="#fff3dd" />
+      <pointLight position={[ 15, 17, -15]} intensity={70}  distance={30} decay={1.4} color="#fff3dd" />
 
       <FactoryRoom />
 
