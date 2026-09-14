@@ -4,7 +4,7 @@ import { useStore } from '../store.js';
 
 export const ROOM_WIDTH = 380;
 export const ROOM_DEPTH = 640;
-export const ROOM_HEIGHT = 124;
+export const ROOM_HEIGHT = 248;
 
 const MACHINE_LAYOUT = [
   { id: 'M1', type: 'CNC',     pos: [-118, 0,  88], scale: 2.5  },
@@ -413,7 +413,7 @@ export default function FactoryRoom() {
 
       {[-220, -110, 0, 110, 220].map((z) =>
         [-1, 1].map((side) => (
-          <mesh key={`win-${side}-${z}`} position={[side * (ROOM_WIDTH / 2 - 0.38), 44, z]}>
+          <mesh key={`win-${side}-${z}`} position={[side * (ROOM_WIDTH / 2 - 0.38), 88, z]}>
             <boxGeometry args={[0.12, 32, 28]} />
             <meshStandardMaterial
               color="#6a8aa0"
