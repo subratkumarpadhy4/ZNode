@@ -39,8 +39,8 @@ export default function Scene3D() {
       <Canvas
         shadows
         gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 0.95 }}
-        camera={{ position: [0, 100, 140], fov: 50, near: 0.8, far: 3600 }}
-        style={{ background: '#0e1218', width: '100%', height: '100%' }}
+        camera={{ position: [0, 150, 250], fov: 50, near: 0.8, far: 3600 }}
+        style={{ background: '#5c6b7a', width: '100%', height: '100%' }}
       >
         <hemisphereLight args={['#c8d8e8', '#5a6068', 0.52]} />
         <ambientLight intensity={0.3} color="#cdd8e2" />
@@ -65,11 +65,13 @@ export default function Scene3D() {
         <FactoryRoom floorBright={floorBright} />
 
         <OrbitControls
-          target={[0, 20, 0]}
-          minDistance={50}
-          maxDistance={165}
-          minPolarAngle={Math.PI / 4}
-          maxPolarAngle={Math.PI / 1.9}
+          target={[0, 0, -100]}
+          minDistance={40}
+          maxDistance={380}
+          minPolarAngle={Math.PI / 5}
+          maxPolarAngle={Math.PI / 2.3}
+          minAzimuthAngle={-Math.PI / 2.5}
+          maxAzimuthAngle={Math.PI / 2.5}
           enablePan={false}
           enableZoom
           enableRotate
