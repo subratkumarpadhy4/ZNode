@@ -5,6 +5,8 @@ export const useStore = create((set) => ({
   incidents: {},
   activityFeed: [],
   selectedMachineId: null,
+  floorView: '3d',
+  setFloorView: (v) => set({ floorView: v }),
 
   setSnapshot: (list) => set((s) => {
     const machines = { ...s.machines };

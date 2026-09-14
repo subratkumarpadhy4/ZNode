@@ -3,7 +3,7 @@ import { useSocket } from './hooks/useSocket.js';
 import { useStore } from './store.js';
 import TopBar from './components/TopBar.jsx';
 import Nav from './components/Nav.jsx';
-import MachineFloor from './components/MachineFloor.jsx';
+import FloorView from './components/FloorView.jsx';
 import KPITiles from './components/KPITiles.jsx';
 import ActivityFeed from './components/ActivityFeed.jsx';
 import DetailsPanel from './components/DetailsPanel.jsx';
@@ -23,7 +23,7 @@ export default function App() {
       <main className="main-content">
         {activeTab === 'today' && (
           <>
-            <MachineFloor />
+            <FloorView />
             <KPITiles />
             <ActivityFeed />
           </>
