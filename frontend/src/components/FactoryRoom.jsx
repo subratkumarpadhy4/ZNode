@@ -178,10 +178,6 @@ function FurnaceMachine({ onSelect }) {
         <cylinderGeometry args={[5.2, 5.5, 12, 32]} />
         <meshStandardMaterial color="#6c757e" roughness={0.4} metalness={0.38} emissive="#5a3a28" emissiveIntensity={0.14} />
       </mesh>
-      <mesh position={[0, 9.2, 5.4]}>
-        <boxGeometry args={[2.8, 4.4, 0.2]} />
-        <meshStandardMaterial color="#3d4650" roughness={0.45} metalness={0.45} />
-      </mesh>
       <mesh castShadow position={[0, 16.2, 0]}>
         <cylinderGeometry args={[1.5, 1.8, 2.4, 16]} />
         <meshStandardMaterial color={STEEL_DARK} roughness={0.45} metalness={0.55} />
@@ -218,8 +214,8 @@ function KilnMachine({ onSelect }) {
         <boxGeometry args={[3.4, 6.6, 6.4]} />
         <meshStandardMaterial color="#5a636c" roughness={0.45} metalness={0.28} />
       </mesh>
-      {/* Nameplate at cylinder center height on the near support front face */}
-      <NamePlate machineId="M3" position={[0, 5.1, 3.15]} />
+      {/* Nameplate on cylinder front surface — z=4.7 clears the 4.6 radius */}
+      <NamePlate machineId="M3" position={[0, 5.1, 4.7]} />
       <GuardRing width={30} depth={14} />
     </group>
   );
