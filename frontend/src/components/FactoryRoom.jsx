@@ -14,8 +14,8 @@ const MACHINE_LAYOUT = [
 
 const STEEL = '#5a6570';
 const STEEL_DARK = '#454e57';
-const CONCRETE = '#8a857b';
-const WALL = '#7a7670';
+const CONCRETE = '#84888e';
+const WALL = '#686e78';
 const DADO = '#4e5c68';
 
 function statusColor(machine, incident) {
@@ -68,30 +68,38 @@ function BasePlate({ width, depth }) {
   );
 }
 
-function MachineLabel({ machineId, type, machine, color, y = 16 }) {
-  const kw = machine ? `${(machine.metrics?.excess_kw ?? 0).toFixed(1)} kW` : '— kW';
+/* NamePlate — dark physical panel bolted to machine front face */
+function NamePlate({ machineId, position }) {
   return (
-    <Html position={[0, y, 0]} center distanceFactor={55} style={{ pointerEvents: 'none' }}>
-      <div style={{
-        background: 'rgba(10,14,26,0.94)',
-        border: `3px solid ${color}`,
-        borderRadius: 10,
-        padding: '12px 22px',
-        color: '#f1f5f9',
-        fontFamily: 'Segoe UI, system-ui, sans-serif',
-        whiteSpace: 'nowrap',
-        boxShadow: `0 0 24px ${color}55`,
-        minWidth: 140,
-        textAlign: 'center',
-      }}>
-        <div style={{ color: '#94a3b8', fontSize: 15, letterSpacing: 1, fontWeight: 600 }}>
-          {machineId} · {type}
+    <group position={position}>
+      {/* Slightly raised backing plate — inset shadow effect */}
+      <mesh position={[0, 0, -0.05]}>
+        <boxGeometry args={[7.2, 3.2, 0.08]} />
+        <meshStandardMaterial color="#060810" roughness={0.98} metalness={0.05} />
+      </mesh>
+      {/* Main panel */}
+      <mesh>
+        <boxGeometry args={[6.8, 2.8, 0.12]} />
+        <meshStandardMaterial color="#0a0d12" roughness={0.95} metalness={0.05} />
+      </mesh>
+      {/* Machine ID text */}
+      <Html center distanceFactor={50} style={{ pointerEvents: 'none' }}>
+        <div style={{
+          color: '#dde4ef',
+          fontFamily: 'monospace, Courier New, sans-serif',
+          fontWeight: 700,
+          fontSize: 36,
+          letterSpacing: 6,
+          textShadow: '0 0 8px rgba(200,220,255,0.4)',
+          userSelect: 'none',
+        }}>
+          {machineId}
         </div>
-        <div style={{ color, fontWeight: 800, fontSize: 28, marginTop: 4 }}>{kw}</div>
-      </div>
-    </Html>
+      </Html>
+    </group>
   );
 }
+
 
 function GuardRing({ width, depth }) {
   const posts = [
@@ -153,6 +161,8 @@ function CncMachine({ onSelect }) {
         <boxGeometry args={[4.4, 2.2, 2.4]} />
         <meshStandardMaterial color="#5c6670" roughness={0.5} metalness={0.35} />
       </mesh>
+      {/* Nameplate on front face of main body */}
+      <NamePlate machineId="M1" position={[0, 5.0, 5.62]} />
       <GuardRing width={22} depth={16} />
     </group>
   );
@@ -181,6 +191,8 @@ function FurnaceMachine({ onSelect }) {
         <cylinderGeometry args={[1.5, 1.8, 2.4, 16]} />
         <meshStandardMaterial color={STEEL_DARK} roughness={0.45} metalness={0.55} />
       </mesh>
+      {/* Nameplate on the access panel box on the cylinder front */}
+      <NamePlate machineId="M2" position={[0, 9.2, 5.52]} />
       <GuardRing width={18} depth={18} />
     </group>
   );
@@ -211,6 +223,8 @@ function KilnMachine({ onSelect }) {
         <boxGeometry args={[3.4, 6.6, 6.4]} />
         <meshStandardMaterial color="#5a636c" roughness={0.45} metalness={0.28} />
       </mesh>
+      {/* Nameplate on middle support front face */}
+      <NamePlate machineId="M3" position={[0, 2.5, 3.12]} />
       <GuardRing width={30} depth={14} />
     </group>
   );
@@ -373,17 +387,21 @@ export default function FactoryRoom() {
         </mesh>
       ))}
 
-      {/* Three walls; south side is open loading bays */}
-      {[
-        [0, ROOM_HEIGHT / 2, -ROOM_DEPTH / 2, [ROOM_WIDTH, ROOM_HEIGHT, 0.55]],
-        [-ROOM_WIDTH / 2, ROOM_HEIGHT / 2, 0, [0.55, ROOM_HEIGHT, ROOM_DEPTH]],
-        [ROOM_WIDTH / 2, ROOM_HEIGHT / 2, 0, [0.55, ROOM_HEIGHT, ROOM_DEPTH]],
-      ].map(([x, y, z, args], i) => (
-        <mesh key={`wall-${i}`} receiveShadow position={[x, y, z]}>
-          <boxGeometry args={args} />
-          <meshStandardMaterial color={WALL} roughness={0.88} metalness={0.02} side={THREE.DoubleSide} />
-        </mesh>
-      ))}
+      {/* Three walls — back wall darkened so it recedes */}
+      {/* Back wall (far end) — darker so eye doesn't go there */}
+      <mesh receiveShadow position={[0, ROOM_HEIGHT / 2, -ROOM_DEPTH / 2]}>
+        <boxGeometry args={[ROOM_WIDTH, ROOM_HEIGHT, 0.55]} />
+        <meshStandardMaterial color="#3e424a" roughness={0.94} metalness={0.02} side={THREE.DoubleSide} />
+      </mesh>
+      {/* Side walls */}
+      <mesh receiveShadow position={[-ROOM_WIDTH / 2, ROOM_HEIGHT / 2, 0]}>
+        <boxGeometry args={[0.55, ROOM_HEIGHT, ROOM_DEPTH]} />
+        <meshStandardMaterial color={WALL} roughness={0.88} metalness={0.02} side={THREE.DoubleSide} />
+      </mesh>
+      <mesh receiveShadow position={[ROOM_WIDTH / 2, ROOM_HEIGHT / 2, 0]}>
+        <boxGeometry args={[0.55, ROOM_HEIGHT, ROOM_DEPTH]} />
+        <meshStandardMaterial color={WALL} roughness={0.88} metalness={0.02} side={THREE.DoubleSide} />
+      </mesh>
 
       {/* South end: wide open loading bays under a header (camera looks in from here) */}
       <mesh position={[-168, ROOM_HEIGHT / 2, ROOM_DEPTH / 2]}>
@@ -470,13 +488,6 @@ export default function FactoryRoom() {
               intensity={glow.intensity}
               distance={glow.distance}
               y={beaconY}
-            />
-            <MachineLabel
-              machineId={layout.id}
-              type={layout.type}
-              machine={machine}
-              color={color}
-              y={beaconY + 3.2}
             />
           </group>
         );
