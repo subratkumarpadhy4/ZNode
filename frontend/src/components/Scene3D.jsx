@@ -7,44 +7,34 @@ export default function Scene3D() {
     <Canvas
       shadows
       gl={{ antialias: true }}
-      camera={{ position: [0, 4, 18], fov: 55 }}
+      camera={{ position: [0, 5, 22], fov: 55 }}
       style={{ background: '#08090d', width: '100%', height: '100%' }}
     >
-      {/* Ambient raised to 0.3 — girders catch it, ceiling visible */}
       <ambientLight intensity={0.3} />
 
-      {/* Key light from upper-right, inside the room */}
+      {/* Key light — fill only, no castShadow, reduced intensity */}
       <directionalLight
-        position={[12, 14, 10]}
-        intensity={1.2}
+        position={[15, 18, 12]}
+        intensity={0.8}
         color="#fff3dd"
-        castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-        shadow-camera-far={120}
-        shadow-camera-left={-50}
-        shadow-camera-right={50}
-        shadow-camera-top={50}
-        shadow-camera-bottom={-50}
-        shadow-bias={-0.0004}
       />
 
-      {/* Cool fill from opposite side */}
-      <directionalLight position={[-14, 10, -12]} intensity={0.22} color="#8b95a8" />
+      {/* Cool fill */}
+      <directionalLight position={[-18, 12, -15]} intensity={0.22} color="#8b95a8" />
 
-      {/* Five overhead point lights — decay 1.4 reaches floor from y=17 */}
-      <pointLight position={[  0, 17,   0]} intensity={150} distance={40} decay={1.4} color="#fff3dd" castShadow />
-      <pointLight position={[-15, 17, -15]} intensity={90}  distance={32} decay={1.4} color="#fff3dd" />
-      <pointLight position={[ 15, 17,  15]} intensity={90}  distance={32} decay={1.4} color="#fff3dd" />
-      <pointLight position={[-15, 17,  15]} intensity={70}  distance={30} decay={1.4} color="#fff3dd" />
-      <pointLight position={[ 15, 17, -15]} intensity={70}  distance={30} decay={1.4} color="#fff3dd" />
+      {/* Five overhead point lights — matched to fixture positions */}
+      <pointLight position={[  0, 20,   0]} intensity={150} distance={50} decay={1.4} color="#fff3dd" />
+      <pointLight position={[-24, 20, -24]} intensity={90}  distance={50} decay={1.4} color="#fff3dd" />
+      <pointLight position={[ 24, 20,  24]} intensity={90}  distance={50} decay={1.4} color="#fff3dd" />
+      <pointLight position={[-24, 20,  24]} intensity={70}  distance={50} decay={1.4} color="#fff3dd" />
+      <pointLight position={[ 24, 20, -24]} intensity={70}  distance={50} decay={1.4} color="#fff3dd" />
 
       <FactoryRoom />
 
       <OrbitControls
-        target={[0, 1.5, 0]}
-        minDistance={4}
-        maxDistance={24}
+        target={[0, 2, 0]}
+        minDistance={6}
+        maxDistance={35}
         minPolarAngle={Math.PI / 5}
         maxPolarAngle={Math.PI / 2.15}
         minAzimuthAngle={-Math.PI / 2.4}
