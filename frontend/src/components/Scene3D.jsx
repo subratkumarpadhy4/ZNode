@@ -7,20 +7,15 @@ export default function Scene3D() {
     <Canvas
       shadows
       gl={{ antialias: true }}
-      camera={{ position: [0, 3, 12], fov: 50 }}
-      style={{ background: '#08090d', width: '100%', height: '100%' }}
+      camera={{ position: [0, 3, 14], fov: 55 }}
+      style={{ background: '#0a0e1a', width: '100%', height: '100%' }}
     >
-      {/* Atmospheric fog — creates depth, dark corners */}
-      <fog attach="fog" args={['#08090d', 18, 55]} />
+      <ambientLight intensity={0.6} />
 
-      {/* Ambient — barely visible, prevents pure black on back faces */}
-      <ambientLight intensity={0.08} />
-
-      {/* Key light — warm, from upper-right front */}
       <directionalLight
-        position={[6, 14, 10]}
-        intensity={0.6}
-        color="#cdd5e0"
+        position={[10, 14, 8]}
+        intensity={1.2}
+        color="#f1f5f9"
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -32,24 +27,20 @@ export default function Scene3D() {
         shadow-bias={-0.0005}
       />
 
-      {/* Cool fill — opposite side */}
       <directionalLight
-        position={[-8, 8, -6]}
-        intensity={0.12}
-        color="#334155"
+        position={[-10, 8, -10]}
+        intensity={0.4}
+        color="#64748b"
       />
 
       <FactoryRoom />
 
       <OrbitControls
-        target={[0, 1, 0]}
-        minDistance={4}
-        maxDistance={22}
-        minPolarAngle={Math.PI / 10}
-        maxPolarAngle={Math.PI / 2.2}
-        enablePan={true}
-        enableZoom={true}
-        enableRotate={true}
+        target={[0, 1.5, 0]}
+        minDistance={6}
+        maxDistance={25}
+        minPolarAngle={Math.PI / 8}
+        maxPolarAngle={Math.PI / 2.3}
       />
     </Canvas>
   );
