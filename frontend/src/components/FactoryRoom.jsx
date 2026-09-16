@@ -15,8 +15,11 @@ const MACHINE_LAYOUT = [
 const STEEL = '#5a6570';
 const STEEL_DARK = '#454e57';
 const CONCRETE = '#84888e';
-const WALL = '#686e78';
-const DADO = '#4e5c68';
+const WALL = '#7a8490';        // XFORGE industrial panel — warmer, lighter
+const WALL_BACK = '#4e5560';   // Rear wall — slightly lifted from void-black
+const DADO = '#3d4a58';        // XFORGE dado — cooler, deeper slate
+const DUCT_METAL = '#c8d0db';  // XFORGE galvanised sheet-metal HVAC
+const FIXTURE_HSG = '#334155'; // XFORGE high-bay fixture housing — dark slate
 
 function statusColor(machine, incident) {
   if (!machine) return '#22c55e';
@@ -291,11 +294,11 @@ function HighBayFixture({ position }) {
     <group position={position}>
       <mesh>
         <boxGeometry args={[4.8, 0.35, 1.4]} />
-        <meshStandardMaterial color="#4a525a" roughness={0.42} metalness={0.45} />
+        <meshStandardMaterial color={FIXTURE_HSG} roughness={0.42} metalness={0.55} />
       </mesh>
       <mesh position={[0, -0.22, 0]}>
         <boxGeometry args={[4.4, 0.08, 1.15]} />
-        <meshStandardMaterial color="#d8c89a" roughness={0.35} emissive="#c4b070" emissiveIntensity={0.22} />
+        <meshStandardMaterial color="#d8c89a" roughness={0.32} emissive="#c4b070" emissiveIntensity={0.35} />
       </mesh>
     </group>
   );
@@ -338,7 +341,7 @@ export default function FactoryRoom({ floorBright = false }) {
       {/* Exterior apron so the open bays don't look into a void */}
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.04, 0]}>
         <planeGeometry args={[900, 1200]} />
-        <meshStandardMaterial color="#5a6270" roughness={0.88} />
+        <meshStandardMaterial color="#535c65" roughness={0.88} />
       </mesh>
 
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]}>
@@ -378,11 +381,47 @@ export default function FactoryRoom({ floorBright = false }) {
         </mesh>
       ))}
 
-      {/* Three walls — back wall darkened so it recedes */}
-      {/* Back wall (far end) — darker so eye doesn't go there */}
+      {/* ── XFORGE HVAC Ceiling Infrastructure ───────────────────────────────
+          Galvanised sheet-metal duct trunks + cross branches at ceiling level.
+          Pure structural MEP — no props, no machines. Adds industrial height. */}
+      <group>
+        {/* Longitudinal trunk ducts running room-width (X axis) */}
+        {[-150, -50, 50, 150].map((z) => (
+          <mesh key={`trunk-${z}`} position={[0, ROOM_HEIGHT - 22, z]}>
+            <boxGeometry args={[ROOM_WIDTH - 4, 14, 52]} />
+            <meshStandardMaterial color={DUCT_METAL} metalness={0.85} roughness={0.30} />
+          </mesh>
+        ))}
+        {/* Cross-branch ducts running room-depth (Z axis) */}
+        {[-130, 0, 130].map((x) => (
+          <mesh key={`branch-${x}`} position={[x, ROOM_HEIGHT - 26, 0]}>
+            <boxGeometry args={[42, 12, ROOM_DEPTH - 8]} />
+            <meshStandardMaterial color={DUCT_METAL} metalness={0.82} roughness={0.34} />
+          </mesh>
+        ))}
+        {/* Supply diffuser cones at trunk/branch intersections */}
+        {[-130, 0, 130].flatMap((x) =>
+          [-150, -50, 50, 150].map((z) => (
+            <mesh key={`diff-${x}-${z}`} position={[x, ROOM_HEIGHT - 34, z]} rotation={[Math.PI, 0, 0]}>
+              <coneGeometry args={[14, 10, 12]} />
+              <meshStandardMaterial color="#94a3b8" metalness={0.70} roughness={0.40} />
+            </mesh>
+          ))
+        )}
+        {/* High-level overhead process pipe run — stainless, full room width */}
+        {[-200, -60, 80].map((z) => (
+          <mesh key={`pipe-${z}`} position={[0, ROOM_HEIGHT - 38, z]} rotation={[0, 0, Math.PI / 2]}>
+            <cylinderGeometry args={[4.5, 4.5, ROOM_WIDTH - 6, 14]} />
+            <meshStandardMaterial color="#b0b8c4" metalness={0.88} roughness={0.25} />
+          </mesh>
+        ))}
+      </group>
+
+      {/* Three walls — back wall slightly lifted so it reads as a wall, not a void */}
+      {/* Back wall (far end) */}
       <mesh receiveShadow position={[0, ROOM_HEIGHT / 2, -ROOM_DEPTH / 2]}>
         <boxGeometry args={[ROOM_WIDTH, ROOM_HEIGHT, 0.55]} />
-        <meshStandardMaterial color="#3e424a" roughness={0.94} metalness={0.02} side={THREE.DoubleSide} />
+        <meshStandardMaterial color={WALL_BACK} roughness={0.94} metalness={0.02} side={THREE.DoubleSide} />
       </mesh>
       {/* Side walls */}
       <mesh receiveShadow position={[-ROOM_WIDTH / 2, ROOM_HEIGHT / 2, 0]}>
